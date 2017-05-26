@@ -1,0 +1,26 @@
+{
+    "lvoteApp": {
+        "voting" : {
+            "home": {
+                "title": "Votings",
+                "createLabel": "Dodaj Voting",
+                "createOrEditLabel": "Dodaj lub edytuj: Voting"
+            },
+            "created": "Utworzono nowy Voting z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono Voting z identyfikatorem {{ param }}",
+            "deleted": "Usunięto Voting z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć Voting {{ id }}?"
+            },
+            "detail": {
+                "title": "Voting"
+            },
+            "name": "Name",
+            "startDateTime": "Start Date Time",
+            "endDateTime": "End Date Time",
+            "encryption": "Encryption",
+            "votes": "Votes",
+            "owner": "Owner"
+        }
+    }
+}

@@ -1,0 +1,39 @@
+
+<div>
+    <h2><span data-translate="lvoteApp.voting.detail.title">Voting</span> {{vm.voting.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="lvoteApp.voting.name">Name</span></dt>
+        <dd>
+            <span>{{vm.voting.name}}</span>
+        </dd>
+        <dt><span data-translate="lvoteApp.voting.startDateTime">Start Date Time</span></dt>
+        <dd>
+            <span>{{vm.voting.startDateTime | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span data-translate="lvoteApp.voting.endDateTime">End Date Time</span></dt>
+        <dd>
+            <span>{{vm.voting.endDateTime | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span data-translate="lvoteApp.voting.encryption">Encryption</span></dt>
+        <dd>
+            <a ui-sref="encryption-data-detail({id:vm.voting.encryption.id})">{{vm.voting.encryption.id}}</a>
+        </dd>
+        <dt><span data-translate="lvoteApp.voting.owner">Owner</span></dt>
+        <dd>
+            {{vm.voting.owner.id}}
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="voting-detail.edit({id:vm.voting.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

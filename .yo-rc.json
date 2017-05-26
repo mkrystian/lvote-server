@@ -1,0 +1,72 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "lvote.mprezes.student.agh.edu.pl",
+      "nativeLanguage": "en"
+    },
+    "jhipsterVersion": "4.4.1",
+    "baseName": "lvote",
+    "packageName": "lvote.mprezes.student.agh.edu.pl",
+    "packageFolder": "lvote/mprezes/student/agh/edu/pl",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": false,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSocialSignIn": true,
+    "jwtSecretKey": "a6a54479bf654dd37cb612a416f6742b954c0558",
+    "clientFramework": "angular1",
+    "useSass": true,
+    "clientPackageManager": "yarn",
+    "applicationType": "monolith",
+    "testFrameworks": [
+      "cucumber"
+    ],
+    "jhiPrefix": "jhi",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-module",
+        "version": "2.0.0"
+      },
+      {
+        "name": "generator-jhipster-docker",
+        "version": "2.2.0"
+      },
+      {
+        "name": "generator-jhipster-swagger2markup",
+        "version": "1.2.0"
+      },
+      {
+        "name": "generator-jhipster-swagger-cli",
+        "version": "2.0.5"
+      },
+      {
+        "name": "generator-jhipster-entity-audit-and-delete",
+        "version": "2.2.2"
+      }
+    ],
+    "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": [
+      "en",
+      "pl"
+    ]
+  },
+  "generator-jhipster-swagger-cli": {
+    "apis": {
+      "lvoteandroid": {
+        "spec": "http://localhost:8080/#/docs",
+        "cliTypes": [
+          "back"
+        ]
+      }
+    }
+  }
+}

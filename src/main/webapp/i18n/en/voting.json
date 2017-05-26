@@ -1,0 +1,26 @@
+{
+    "lvoteApp": {
+        "voting" : {
+            "home": {
+                "title": "Votings",
+                "createLabel": "Create a new Voting",
+                "createOrEditLabel": "Create or edit a Voting"
+            },
+            "created": "A new Voting is created with identifier {{ param }}",
+            "updated": "A Voting is updated with identifier {{ param }}",
+            "deleted": "A Voting is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Voting {{ id }}?"
+            },
+            "detail": {
+                "title": "Voting"
+            },
+            "name": "Name",
+            "startDateTime": "Start Date Time",
+            "endDateTime": "End Date Time",
+            "encryption": "Encryption",
+            "votes": "Votes",
+            "owner": "Owner"
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "lvoteApp": {
+        "votingContent" : {
+            "home": {
+                "title": "Voting Contents",
+                "createLabel": "Dodaj Voting Content",
+                "createOrEditLabel": "Dodaj lub edytuj: Voting Content"
+            },
+            "created": "Utworzono nowy Voting Content z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono Voting Content z identyfikatorem {{ param }}",
+            "deleted": "Usunięto Voting Content z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć Voting Content {{ id }}?"
+            },
+            "detail": {
+                "title": "Voting Content"
+            },
+            "question": "Question"
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "lvoteApp": {
+        "userGroup" : {
+            "home": {
+                "title": "User Groups",
+                "createLabel": "Dodaj User Group",
+                "createOrEditLabel": "Dodaj lub edytuj: User Group"
+            },
+            "created": "Utworzono nowy User Group z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono User Group z identyfikatorem {{ param }}",
+            "deleted": "Usunięto User Group z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć User Group {{ id }}?"
+            },
+            "detail": {
+                "title": "User Group"
+            },
+            "name": "Name",
+            "permitedGroup": "Permited Group",
+            "owner": "Owner"
+        }
+    }
+}

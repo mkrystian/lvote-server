@@ -1,0 +1,20 @@
+{
+    "lvoteApp": {
+        "encryptionData" : {
+            "home": {
+                "title": "Encryption Data",
+                "createLabel": "Dodaj Encryption Data",
+                "createOrEditLabel": "Dodaj lub edytuj: Encryption Data"
+            },
+            "created": "Utworzono nowy Encryption Data z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono Encryption Data z identyfikatorem {{ param }}",
+            "deleted": "Usunięto Encryption Data z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć Encryption Data {{ id }}?"
+            },
+            "detail": {
+                "title": "Encryption Data"
+            }
+        }
+    }
+}

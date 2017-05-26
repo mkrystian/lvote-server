@@ -1,0 +1,22 @@
+{
+    "lvoteApp": {
+        "vote" : {
+            "home": {
+                "title": "Votes",
+                "createLabel": "Dodaj Vote",
+                "createOrEditLabel": "Dodaj lub edytuj: Vote"
+            },
+            "created": "Utworzono nowy Vote z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono Vote z identyfikatorem {{ param }}",
+            "deleted": "Usunięto Vote z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć Vote {{ id }}?"
+            },
+            "detail": {
+                "title": "Vote"
+            },
+            "voting": "Voting",
+            "owner": "Owner"
+        }
+    }
+}

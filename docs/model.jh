@@ -1,0 +1,47 @@
+entity Voting	{
+	id Long required,
+    name String,
+    startDateTime LocalDate required,
+    endDateTime LocalDate required
+}
+
+entity VotingContent	{
+	question String required,
+}
+
+entity UserGroup {
+	id Long required,
+    name String
+}
+
+entity Vote	{
+	id Long required
+}
+
+entity EncryptionData	{
+
+}
+
+relationship OneToMany	{
+	Voting{votes} to Vote
+}
+
+relationship ManyToOne	{
+	UserGroup{permitedGroup} to Voting
+}
+
+relationship ManyToOne	{
+	Voting{owner} to User
+}
+
+relationship ManyToOne	{
+	UserGroup{owner} to User
+}
+
+relationship ManyToOne	{
+	Vote{owner} to User
+}
+
+relationship OneToOne	{
+	Voting{encryption} to EncryptionData
+}
