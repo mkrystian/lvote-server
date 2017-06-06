@@ -16,9 +16,9 @@
 
 eureka:
     client:
-        enabled: true
+        enabled: false
         healthcheck:
-            enabled: true
+            enabled: false
         fetch-registry: true
         register-with-eureka: false
         instance-info-replication-interval-seconds: 10
@@ -36,7 +36,7 @@ eureka:
             version: ${info.project.version}
 ribbon:
     eureka:
-        enabled: true
+        enabled: false
 management:
     security:
         roles: ADMIN
