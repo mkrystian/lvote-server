@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+pushd `dirname $0`
+SCRIPT_PATH=`pwd`
 LVOTE_PID=`ps -ef | grep '[j]ava -jar.*lvote.*.war' | awk '{ print $2 }'`
 
 if [ -z "$LVOTE_PID" ]; then
@@ -13,7 +15,7 @@ else
 fi
 
 echo "Recreating db schema..."
-./recreate_db_schema.sh
+${SCRIPT_PATH}/recreate_db_schema.sh
 echo "DB schema recreated"
 
 echo "Starting lvote server..."
