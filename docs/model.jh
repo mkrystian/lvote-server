@@ -27,11 +27,15 @@ relationship OneToMany	{
 }
 
 relationship ManyToOne	{
-	UserGroup{permitedGroup} to Voting
+	UserGroup{votings} to Voting
 }
 
 relationship ManyToOne	{
 	Voting{owner} to User
+}
+
+relationship ManyToMany	{
+	UserGroup{members} to User
 }
 
 relationship ManyToOne	{

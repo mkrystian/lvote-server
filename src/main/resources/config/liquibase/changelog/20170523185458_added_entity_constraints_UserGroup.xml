@@ -7,16 +7,27 @@
         Added the constraints for entity UserGroup.
     -->
     <changeSet id="20170523185458-2" author="jhipster">
-        
-        <addForeignKeyConstraint baseColumnNames="permited_group_id"
+
+        <addForeignKeyConstraint baseColumnNames="votings_id"
                                  baseTableName="user_group"
-                                 constraintName="fk_user_group_permited_group_id"
+                                 constraintName="fk_user_group_votings_id"
                                  referencedColumnNames="id"
                                  referencedTableName="voting"/>
 
         <addForeignKeyConstraint baseColumnNames="owner_id"
                                  baseTableName="user_group"
                                  constraintName="fk_user_group_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_groups_id"
+                                 baseTableName="user_group_members"
+                                 constraintName="fk_user_group_members_user_groups_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_group"/>
+        <addForeignKeyConstraint baseColumnNames="members_id"
+                                 baseTableName="user_group_members"
+                                 constraintName="fk_user_group_members_members_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 

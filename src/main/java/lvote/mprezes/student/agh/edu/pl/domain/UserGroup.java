@@ -5,7 +5,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A UserGroup.
@@ -25,10 +27,17 @@ public class UserGroup implements Serializable {
     private String name;
 
     @ManyToOne
-    private Voting permitedGroup;
+    private Voting votings;
 
     @ManyToOne
     private User owner;
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "user_group_members",
+        joinColumns = @JoinColumn(name = "user_groups_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "members_id", referencedColumnName = "id"))
+    private Set<User> members = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -51,17 +60,17 @@ public class UserGroup implements Serializable {
         this.name = name;
     }
 
-    public Voting getPermitedGroup() {
-        return permitedGroup;
+    public Voting getVotings() {
+        return votings;
     }
 
-    public UserGroup permitedGroup(Voting voting) {
-        this.permitedGroup = voting;
+    public UserGroup votings(Voting voting) {
+        this.votings = voting;
         return this;
     }
 
-    public void setPermitedGroup(Voting voting) {
-        this.permitedGroup = voting;
+    public void setVotings(Voting voting) {
+        this.votings = voting;
     }
 
     public User getOwner() {
@@ -75,6 +84,29 @@ public class UserGroup implements Serializable {
 
     public void setOwner(User user) {
         this.owner = user;
+    }
+
+    public Set<User> getMembers() {
+        return members;
+    }
+
+    public UserGroup members(Set<User> users) {
+        this.members = users;
+        return this;
+    }
+
+    public UserGroup addMembers(User user) {
+        this.members.add(user);
+        return this;
+    }
+
+    public UserGroup removeMembers(User user) {
+        this.members.remove(user);
+        return this;
+    }
+
+    public void setMembers(Set<User> users) {
+        this.members = users;
     }
 
     @Override

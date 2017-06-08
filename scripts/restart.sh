@@ -10,8 +10,11 @@ else
 	echo "kill -9 $LVOTE_PID"
 	kill -9 $LVOTE_PID
 	echo "Killing Lvote server"
-
 fi
+
+echo "Recreating db schema..."
+./recreate_db_schema.sh
+echo "DB schema recreated"
 
 echo "Starting lvote server..."
 echo "java -jar /lvote/lvote-server/target/lvote*.war >> /lvote/logs/server.log 2>> /lvote/logs/server.error.log &"

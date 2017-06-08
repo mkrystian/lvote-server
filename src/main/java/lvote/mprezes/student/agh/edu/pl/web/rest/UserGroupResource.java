@@ -1,11 +1,10 @@
 package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import lvote.mprezes.student.agh.edu.pl.domain.UserGroup;
-
 import lvote.mprezes.student.agh.edu.pl.repository.UserGroupRepository;
 import lvote.mprezes.student.agh.edu.pl.web.rest.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class UserGroupResource {
     private final Logger log = LoggerFactory.getLogger(UserGroupResource.class);
 
     private static final String ENTITY_NAME = "userGroup";
-        
+
     private final UserGroupRepository userGroupRepository;
 
     public UserGroupResource(UserGroupRepository userGroupRepository) {
@@ -84,7 +83,7 @@ public class UserGroupResource {
     @Timed
     public List<UserGroup> getAllUserGroups() {
         log.debug("REST request to get all UserGroups");
-        List<UserGroup> userGroups = userGroupRepository.findAll();
+        List<UserGroup> userGroups = userGroupRepository.findAllWithEagerRelationships();
         return userGroups;
     }
 
@@ -98,7 +97,7 @@ public class UserGroupResource {
     @Timed
     public ResponseEntity<UserGroup> getUserGroup(@PathVariable Long id) {
         log.debug("REST request to get UserGroup : {}", id);
-        UserGroup userGroup = userGroupRepository.findOne(id);
+        UserGroup userGroup = userGroupRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(userGroup));
     }
 

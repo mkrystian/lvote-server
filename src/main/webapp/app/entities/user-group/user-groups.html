@@ -20,8 +20,9 @@
                 <tr>
                     <th><span data-translate="global.field.id">ID</span></th>
                     <th><span data-translate="lvoteApp.userGroup.name">Name</span></th>
-                    <th><span data-translate="lvoteApp.userGroup.permitedGroup">Permited Group</span></th>
+                    <th><span data-translate="lvoteApp.userGroup.votings">Votings</span></th>
                     <th><span data-translate="lvoteApp.userGroup.owner">Owner</span></th>
+                    <th><span data-translate="lvoteApp.userGroup.members">Members</span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -30,10 +31,15 @@
                     <td><a ui-sref="user-group-detail({id:userGroup.id})">{{userGroup.id}}</a></td>
                     <td>{{userGroup.name}}</td>
                     <td>
-                        <a ui-sref="voting-detail({id:userGroup.permitedGroup.id})">{{userGroup.permitedGroup.id}}</a>
+                        <a ui-sref="voting-detail({id:userGroup.votings.id})">{{userGroup.votings.id}}</a>
                     </td>
                     <td>
                         {{userGroup.owner.id}}
+                    </td>
+                    <td>
+                        <span ng-repeat="members in userGroup.members">
+                            {{members.id}}{{$last ? '' : ', '}}
+                        </span>
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">

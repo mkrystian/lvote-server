@@ -16,8 +16,9 @@
                 "title": "User Group"
             },
             "name": "Name",
-            "permitedGroup": "Permited Group",
-            "owner": "Owner"
+            "votings": "Votings",
+            "owner": "Owner",
+            "members": "Members"
         }
     }
 }

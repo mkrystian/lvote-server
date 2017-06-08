@@ -21,8 +21,9 @@
         </div>
 
         <div class="form-group">
-            <label data-translate="lvoteApp.userGroup.permitedGroup" for="field_permitedGroup">Permited Group</label>
-            <select class="form-control" id="field_permitedGroup" name="permitedGroup" ng-model="vm.userGroup.permitedGroup" ng-options="voting as voting.id for voting in vm.votings track by voting.id">
+            <label data-translate="lvoteApp.userGroup.votings" for="field_votings">Votings</label>
+            <select class="form-control" id="field_votings" name="votings" ng-model="vm.userGroup.votings"
+                    ng-options="voting as voting.id for voting in vm.votings track by voting.id">
                 <option value=""></option>
             </select>
         </div>
@@ -31,6 +32,11 @@
             <select class="form-control" id="field_owner" name="owner" ng-model="vm.userGroup.owner" ng-options="user as user.id for user in vm.users track by user.id">
                 <option value=""></option>
             </select>
+        </div>
+        <div class="form-group">
+            <label data-translate="lvoteApp.userGroup.members" for="field_members">Members</label>
+            <select class="form-control" id="field_members" multiple name="members" ng-model="vm.userGroup.members"
+                    ng-options="user as user.id for user in vm.users track by user.id"></select>
         </div>
     </div>
     <div class="modal-footer">

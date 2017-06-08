@@ -3,7 +3,7 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "relationshipName": "permitedGroup",
+            "relationshipName": "votings",
             "otherEntityName": "voting",
             "otherEntityField": "id"
         },
@@ -12,6 +12,14 @@
             "relationshipName": "owner",
             "otherEntityName": "user",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityRelationshipName": "",
+            "relationshipName": "members",
+            "otherEntityName": "user",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "fields": [
