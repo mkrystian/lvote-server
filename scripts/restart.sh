@@ -19,7 +19,11 @@ ${SCRIPT_PATH}/recreate_db_schema.sh
 echo "DB schema recreated"
 
 echo "Starting lvote server..."
-echo "java -jar ${SCRIPT_PATH}/../target/lvote*.war >> ${SCRIPT_PATH}/../logs/server.log 2>> ${SCRIPT_PATH}/../logs/server.error.log &"
-java -jar ${SCRIPT_PATH}/../target/lvote*.war >> ${SCRIPT_PATH}/../logs/server.log 2>> ${SCRIPT_PATH}/../logs/server.error.log &
+#echo "java -jar ${SCRIPT_PATH}/../target/lvote*.war >> ${SCRIPT_PATH}/../logs/server.log 2>> ${SCRIPT_PATH}/../logs/server.error.log &"
+#java -jar ${SCRIPT_PATH}/../target/lvote*.war >> ${SCRIPT_PATH}/../logs/server.log 2>> ${SCRIPT_PATH}/../logs/server.error.log &
+echo "java -jar /lvote/target/lvote*.war >> /lvote/logs/server.log 2>> /lvote/logs/server.error.log &"
+java -jar /lvote/target/lvote*.war >> /lvote/logs/server.log 2>> /lvote/logs/server.error.log &
+
+
 
 echo "Lvote server started"
