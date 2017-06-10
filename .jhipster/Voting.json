@@ -3,6 +3,14 @@
     "relationships": [
         {
             "relationshipType": "one-to-one",
+            "relationshipName": "content",
+            "otherEntityName": "votingContent",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "voting"
+        },
+        {
+            "relationshipType": "one-to-one",
             "relationshipName": "encryption",
             "otherEntityName": "encryptionData",
             "otherEntityField": "id",
@@ -28,14 +36,14 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "startDateTime",
+            "fieldName": "startDate",
             "fieldType": "LocalDate",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "endDateTime",
+            "fieldName": "endDate",
             "fieldType": "LocalDate",
             "fieldValidateRules": [
                 "required"

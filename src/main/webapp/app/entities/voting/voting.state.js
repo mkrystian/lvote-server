@@ -105,8 +105,8 @@
                         entity: function () {
                             return {
                                 name: null,
-                                startDateTime: null,
-                                endDateTime: null,
+                                startDate: null,
+                                endDate: null,
                                 id: null
                             };
                         }

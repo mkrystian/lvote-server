@@ -7,7 +7,13 @@
         Added the constraints for entity Voting.
     -->
     <changeSet id="20170523185456-2" author="jhipster">
-        
+
+        <addForeignKeyConstraint baseColumnNames="content_id"
+                                 baseTableName="voting"
+                                 constraintName="fk_voting_content_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="voting_content"/>
+
         <addForeignKeyConstraint baseColumnNames="encryption_id"
                                  baseTableName="voting"
                                  constraintName="fk_voting_encryption_id"

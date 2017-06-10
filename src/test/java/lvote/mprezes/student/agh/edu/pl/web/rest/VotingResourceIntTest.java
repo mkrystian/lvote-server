@@ -1,11 +1,9 @@
 package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import lvote.mprezes.student.agh.edu.pl.LvoteApp;
-
 import lvote.mprezes.student.agh.edu.pl.domain.Voting;
 import lvote.mprezes.student.agh.edu.pl.repository.VotingRepository;
 import lvote.mprezes.student.agh.edu.pl.web.rest.errors.ExceptionTranslator;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,11 +40,11 @@ public class VotingResourceIntTest {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_START_DATE_TIME = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_START_DATE_TIME = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final LocalDate DEFAULT_END_DATE_TIME = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_END_DATE_TIME = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
 
     @Autowired
     private VotingRepository votingRepository;
@@ -86,8 +84,8 @@ public class VotingResourceIntTest {
     public static Voting createEntity(EntityManager em) {
         Voting voting = new Voting()
             .name(DEFAULT_NAME)
-            .startDateTime(DEFAULT_START_DATE_TIME)
-            .endDateTime(DEFAULT_END_DATE_TIME);
+            .startDate(DEFAULT_START_DATE)
+            .endDate(DEFAULT_END_DATE);
         return voting;
     }
 
@@ -112,8 +110,8 @@ public class VotingResourceIntTest {
         assertThat(votingList).hasSize(databaseSizeBeforeCreate + 1);
         Voting testVoting = votingList.get(votingList.size() - 1);
         assertThat(testVoting.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testVoting.getStartDateTime()).isEqualTo(DEFAULT_START_DATE_TIME);
-        assertThat(testVoting.getEndDateTime()).isEqualTo(DEFAULT_END_DATE_TIME);
+        assertThat(testVoting.getStartDate()).isEqualTo(DEFAULT_START_DATE);
+        assertThat(testVoting.getEndDate()).isEqualTo(DEFAULT_END_DATE);
     }
 
     @Test
@@ -137,10 +135,10 @@ public class VotingResourceIntTest {
 
     @Test
     @Transactional
-    public void checkStartDateTimeIsRequired() throws Exception {
+    public void checkStartDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = votingRepository.findAll().size();
         // set the field null
-        voting.setStartDateTime(null);
+        voting.setStartDate(null);
 
         // Create the Voting, which fails.
 
@@ -155,10 +153,10 @@ public class VotingResourceIntTest {
 
     @Test
     @Transactional
-    public void checkEndDateTimeIsRequired() throws Exception {
+    public void checkEndDateIsRequired() throws Exception {
         int databaseSizeBeforeTest = votingRepository.findAll().size();
         // set the field null
-        voting.setEndDateTime(null);
+        voting.setEndDate(null);
 
         // Create the Voting, which fails.
 
@@ -183,8 +181,8 @@ public class VotingResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(voting.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME.toString())))
-            .andExpect(jsonPath("$.[*].startDateTime").value(hasItem(DEFAULT_START_DATE_TIME.toString())))
-            .andExpect(jsonPath("$.[*].endDateTime").value(hasItem(DEFAULT_END_DATE_TIME.toString())));
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())));
     }
 
     @Test
@@ -199,8 +197,8 @@ public class VotingResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(voting.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME.toString()))
-            .andExpect(jsonPath("$.startDateTime").value(DEFAULT_START_DATE_TIME.toString()))
-            .andExpect(jsonPath("$.endDateTime").value(DEFAULT_END_DATE_TIME.toString()));
+            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
+            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()));
     }
 
     @Test
@@ -222,8 +220,8 @@ public class VotingResourceIntTest {
         Voting updatedVoting = votingRepository.findOne(voting.getId());
         updatedVoting
             .name(UPDATED_NAME)
-            .startDateTime(UPDATED_START_DATE_TIME)
-            .endDateTime(UPDATED_END_DATE_TIME);
+            .startDate(UPDATED_START_DATE)
+            .endDate(UPDATED_END_DATE);
 
         restVotingMockMvc.perform(put("/api/votings")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -235,8 +233,8 @@ public class VotingResourceIntTest {
         assertThat(votingList).hasSize(databaseSizeBeforeUpdate);
         Voting testVoting = votingList.get(votingList.size() - 1);
         assertThat(testVoting.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testVoting.getStartDateTime()).isEqualTo(UPDATED_START_DATE_TIME);
-        assertThat(testVoting.getEndDateTime()).isEqualTo(UPDATED_END_DATE_TIME);
+        assertThat(testVoting.getStartDate()).isEqualTo(UPDATED_START_DATE);
+        assertThat(testVoting.getEndDate()).isEqualTo(UPDATED_END_DATE);
     }
 
     @Test

@@ -5,12 +5,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Voting.
@@ -30,12 +30,16 @@ public class Voting implements Serializable {
     private String name;
 
     @NotNull
-    @Column(name = "start_date_time", nullable = false)
-    private LocalDate startDateTime;
+    @Column(name = "start_date", nullable = false)
+    private LocalDate startDate;
 
     @NotNull
-    @Column(name = "end_date_time", nullable = false)
-    private LocalDate endDateTime;
+    @Column(name = "end_date", nullable = false)
+    private LocalDate endDate;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private VotingContent content;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -70,30 +74,43 @@ public class Voting implements Serializable {
         this.name = name;
     }
 
-    public LocalDate getStartDateTime() {
-        return startDateTime;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public Voting startDateTime(LocalDate startDateTime) {
-        this.startDateTime = startDateTime;
+    public Voting startDate(LocalDate startDate) {
+        this.startDate = startDate;
         return this;
     }
 
-    public void setStartDateTime(LocalDate startDateTime) {
-        this.startDateTime = startDateTime;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getEndDateTime() {
-        return endDateTime;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public Voting endDateTime(LocalDate endDateTime) {
-        this.endDateTime = endDateTime;
+    public Voting endDate(LocalDate endDate) {
+        this.endDate = endDate;
         return this;
     }
 
-    public void setEndDateTime(LocalDate endDateTime) {
-        this.endDateTime = endDateTime;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public VotingContent getContent() {
+        return content;
+    }
+
+    public Voting content(VotingContent votingContent) {
+        this.content = votingContent;
+        return this;
+    }
+
+    public void setContent(VotingContent votingContent) {
+        this.content = votingContent;
     }
 
     public EncryptionData getEncryption() {
@@ -172,8 +189,8 @@ public class Voting implements Serializable {
         return "Voting{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", startDateTime='" + getStartDateTime() + "'" +
-            ", endDateTime='" + getEndDateTime() + "'" +
+            ", startDate='" + getStartDate() + "'" +
+            ", endDate='" + getEndDate() + "'" +
             "}";
     }
 }

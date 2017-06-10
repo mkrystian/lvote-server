@@ -1,10 +1,11 @@
 package lvote.mprezes.student.agh.edu.pl.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -26,6 +27,10 @@ public class VotingContent implements Serializable {
     @Column(name = "question", nullable = false)
     private String question;
 
+    @OneToOne(mappedBy = "content")
+    @JsonIgnore
+    private Voting voting;
+
     public Long getId() {
         return id;
     }
@@ -45,6 +50,19 @@ public class VotingContent implements Serializable {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public Voting getVoting() {
+        return voting;
+    }
+
+    public VotingContent voting(Voting voting) {
+        this.voting = voting;
+        return this;
+    }
+
+    public void setVoting(Voting voting) {
+        this.voting = voting;
     }
 
     @Override

@@ -8,13 +8,17 @@
         <dd>
             <span>{{vm.voting.name}}</span>
         </dd>
-        <dt><span data-translate="lvoteApp.voting.startDateTime">Start Date Time</span></dt>
+        <dt><span data-translate="lvoteApp.voting.startDate">Start Date</span></dt>
         <dd>
-            <span>{{vm.voting.startDateTime | date:'mediumDate'}}</span>
+            <span>{{vm.voting.startDate | date:'mediumDate'}}</span>
         </dd>
-        <dt><span data-translate="lvoteApp.voting.endDateTime">End Date Time</span></dt>
+        <dt><span data-translate="lvoteApp.voting.endDate">End Date</span></dt>
         <dd>
-            <span>{{vm.voting.endDateTime | date:'mediumDate'}}</span>
+            <span>{{vm.voting.endDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span data-translate="lvoteApp.voting.content">Content</span></dt>
+        <dd>
+            <a ui-sref="voting-content-detail({id:vm.voting.content.id})">{{vm.voting.content.id}}</a>
         </dd>
         <dt><span data-translate="lvoteApp.voting.encryption">Encryption</span></dt>
         <dd>

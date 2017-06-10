@@ -5,9 +5,9 @@
         .module('lvoteApp')
         .controller('VotingDialogController', VotingDialogController);
 
-    VotingDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'Voting', 'EncryptionData', 'Vote', 'User'];
+    VotingDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'Voting', 'VotingContent', 'EncryptionData', 'Vote', 'User'];
 
-    function VotingDialogController ($timeout, $scope, $stateParams, $uibModalInstance, $q, entity, Voting, EncryptionData, Vote, User) {
+    function VotingDialogController($timeout, $scope, $stateParams, $uibModalInstance, $q, entity, Voting, VotingContent, EncryptionData, Vote, User) {
         var vm = this;
 
         vm.voting = entity;
@@ -15,6 +15,15 @@
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
+        vm.contents = VotingContent.query({filter: 'voting-is-null'});
+        $q.all([vm.voting.$promise, vm.contents.$promise]).then(function () {
+            if (!vm.voting.content || !vm.voting.content.id) {
+                return $q.reject();
+            }
+            return VotingContent.get({id: vm.voting.content.id}).$promise;
+        }).then(function (content) {
+            vm.contents.push(content);
+        });
         vm.encryptions = EncryptionData.query({filter: 'voting-is-null'});
         $q.all([vm.voting.$promise, vm.encryptions.$promise]).then(function() {
             if (!vm.voting.encryption || !vm.voting.encryption.id) {
@@ -54,8 +63,8 @@
             vm.isSaving = false;
         }
 
-        vm.datePickerOpenStatus.startDateTime = false;
-        vm.datePickerOpenStatus.endDateTime = false;
+        vm.datePickerOpenStatus.startDate = false;
+        vm.datePickerOpenStatus.endDate = false;
 
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;

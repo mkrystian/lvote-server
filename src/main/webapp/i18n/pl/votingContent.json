@@ -15,7 +15,8 @@
             "detail": {
                 "title": "Voting Content"
             },
-            "question": "Question"
+            "question": "Question",
+            "voting": "Voting"
         }
     }
 }

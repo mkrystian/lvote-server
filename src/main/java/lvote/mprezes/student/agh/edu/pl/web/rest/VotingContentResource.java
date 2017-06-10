@@ -1,11 +1,10 @@
 package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import lvote.mprezes.student.agh.edu.pl.domain.VotingContent;
-
 import lvote.mprezes.student.agh.edu.pl.repository.VotingContentRepository;
 import lvote.mprezes.student.agh.edu.pl.web.rest.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing VotingContent.
@@ -27,7 +28,7 @@ public class VotingContentResource {
     private final Logger log = LoggerFactory.getLogger(VotingContentResource.class);
 
     private static final String ENTITY_NAME = "votingContent";
-        
+
     private final VotingContentRepository votingContentRepository;
 
     public VotingContentResource(VotingContentRepository votingContentRepository) {
@@ -79,11 +80,19 @@ public class VotingContentResource {
     /**
      * GET  /voting-contents : get all the votingContents.
      *
+     * @param filter the filter of the request
      * @return the ResponseEntity with status 200 (OK) and the list of votingContents in body
      */
     @GetMapping("/voting-contents")
     @Timed
-    public List<VotingContent> getAllVotingContents() {
+    public List<VotingContent> getAllVotingContents(@RequestParam(required = false) String filter) {
+        if ("voting-is-null".equals(filter)) {
+            log.debug("REST request to get all VotingContents where voting is null");
+            return StreamSupport
+                .stream(votingContentRepository.findAll().spliterator(), false)
+                .filter(votingContent -> votingContent.getVoting() == null)
+                .collect(Collectors.toList());
+        }
         log.debug("REST request to get all VotingContents");
         List<VotingContent> votingContents = votingContentRepository.findAll();
         return votingContents;

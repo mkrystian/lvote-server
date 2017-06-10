@@ -20,38 +20,52 @@
                     />
         </div>
         <div class="form-group">
-            <label class="control-label" data-translate="lvoteApp.voting.startDateTime" for="field_startDateTime">Start Date Time</label>
+            <label class="control-label" data-translate="lvoteApp.voting.startDate" for="field_startDate">Start
+                Date</label>
                 <div class="input-group">
-                    <input id="field_startDateTime" type="text" class="form-control" name="startDateTime" uib-datepicker-popup="{{dateformat}}" ng-model="vm.voting.startDateTime" is-open="vm.datePickerOpenStatus.startDateTime"
-                    required/>
+                    <input id="field_startDate" type="text" class="form-control" name="startDate"
+                           uib-datepicker-popup="{{dateformat}}" ng-model="vm.voting.startDate"
+                           is-open="vm.datePickerOpenStatus.startDate"
+                           required/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('startDateTime')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('startDate')"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
-            <div ng-show="editForm.startDateTime.$invalid">
+            <div ng-show="editForm.startDate.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.startDateTime.$error.required" data-translate="entity.validation.required">
+                   ng-show="editForm.startDate.$error.required" data-translate="entity.validation.required">
                     This field is required.
                 </p>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label" data-translate="lvoteApp.voting.endDateTime" for="field_endDateTime">End Date Time</label>
+            <label class="control-label" data-translate="lvoteApp.voting.endDate" for="field_endDate">End Date</label>
                 <div class="input-group">
-                    <input id="field_endDateTime" type="text" class="form-control" name="endDateTime" uib-datepicker-popup="{{dateformat}}" ng-model="vm.voting.endDateTime" is-open="vm.datePickerOpenStatus.endDateTime"
-                    required/>
+                    <input id="field_endDate" type="text" class="form-control" name="endDate"
+                           uib-datepicker-popup="{{dateformat}}" ng-model="vm.voting.endDate"
+                           is-open="vm.datePickerOpenStatus.endDate"
+                           required/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('endDateTime')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('endDate')"><i
+                            class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
-            <div ng-show="editForm.endDateTime.$invalid">
+            <div ng-show="editForm.endDate.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.endDateTime.$error.required" data-translate="entity.validation.required">
+                   ng-show="editForm.endDate.$error.required" data-translate="entity.validation.required">
                     This field is required.
                 </p>
             </div>
         </div>
 
+        <div class="form-group">
+            <label data-translate="lvoteApp.voting.content" for="field_content">Content</label>
+            <select class="form-control" id="field_content" name="content" ng-model="vm.voting.content"
+                    ng-options="votingContent as votingContent.id for votingContent in vm.contents | orderBy:'id' track by votingContent.id">
+                <option value=""></option>
+            </select>
+        </div>
         <div class="form-group">
             <label data-translate="lvoteApp.voting.encryption" for="field_encryption">Encryption</label>
             <select class="form-control" id="field_encryption" name="encryption" ng-model="vm.voting.encryption" ng-options="encryptionData as encryptionData.id for encryptionData in vm.encryptions | orderBy:'id' track by encryptionData.id">

@@ -16,8 +16,8 @@
                 transformResponse: function (data) {
                     if (data) {
                         data = angular.fromJson(data);
-                        data.startDateTime = DateUtils.convertLocalDateFromServer(data.startDateTime);
-                        data.endDateTime = DateUtils.convertLocalDateFromServer(data.endDateTime);
+                        data.startDate = DateUtils.convertLocalDateFromServer(data.startDate);
+                        data.endDate = DateUtils.convertLocalDateFromServer(data.endDate);
                     }
                     return data;
                 }
@@ -26,8 +26,8 @@
                 method: 'PUT',
                 transformRequest: function (data) {
                     var copy = angular.copy(data);
-                    copy.startDateTime = DateUtils.convertLocalDateToServer(copy.startDateTime);
-                    copy.endDateTime = DateUtils.convertLocalDateToServer(copy.endDateTime);
+                    copy.startDate = DateUtils.convertLocalDateToServer(copy.startDate);
+                    copy.endDate = DateUtils.convertLocalDateToServer(copy.endDate);
                     return angular.toJson(copy);
                 }
             },
@@ -35,8 +35,8 @@
                 method: 'POST',
                 transformRequest: function (data) {
                     var copy = angular.copy(data);
-                    copy.startDateTime = DateUtils.convertLocalDateToServer(copy.startDateTime);
-                    copy.endDateTime = DateUtils.convertLocalDateToServer(copy.endDateTime);
+                    copy.startDate = DateUtils.convertLocalDateToServer(copy.startDate);
+                    copy.endDate = DateUtils.convertLocalDateToServer(copy.endDate);
                     return angular.toJson(copy);
                 }
             }

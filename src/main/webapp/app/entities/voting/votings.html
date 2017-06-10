@@ -20,8 +20,9 @@
                 <tr>
                     <th><span data-translate="global.field.id">ID</span></th>
                     <th><span data-translate="lvoteApp.voting.name">Name</span></th>
-                    <th><span data-translate="lvoteApp.voting.startDateTime">Start Date Time</span></th>
-                    <th><span data-translate="lvoteApp.voting.endDateTime">End Date Time</span></th>
+                    <th><span data-translate="lvoteApp.voting.startDate">Start Date</span></th>
+                    <th><span data-translate="lvoteApp.voting.endDate">End Date</span></th>
+                    <th><span data-translate="lvoteApp.voting.content">Content</span></th>
                     <th><span data-translate="lvoteApp.voting.encryption">Encryption</span></th>
                     <th><span data-translate="lvoteApp.voting.owner">Owner</span></th>
                     <th></th>
@@ -31,8 +32,11 @@
                 <tr ng-repeat="voting in vm.votings track by voting.id">
                     <td><a ui-sref="voting-detail({id:voting.id})">{{voting.id}}</a></td>
                     <td>{{voting.name}}</td>
-                        <td>{{voting.startDateTime | date:'mediumDate'}}</td>
-                        <td>{{voting.endDateTime | date:'mediumDate'}}</td>
+                    <td>{{voting.startDate | date:'mediumDate'}}</td>
+                    <td>{{voting.endDate | date:'mediumDate'}}</td>
+                    <td>
+                        <a ui-sref="voting-content-detail({id:voting.content.id})">{{voting.content.id}}</a>
+                    </td>
                     <td>
                         <a ui-sref="encryption-data-detail({id:voting.encryption.id})">{{voting.encryption.id}}</a>
                     </td>

@@ -1,8 +1,8 @@
 entity Voting	{
 	id Long required,
     name String,
-    startDateTime LocalDate required,
-    endDateTime LocalDate required
+    startDate LocalDate required,
+    endDate LocalDate required
 }
 
 entity VotingContent	{
@@ -20,6 +20,10 @@ entity Vote	{
 
 entity EncryptionData	{
 
+}
+
+relationship OneToOne {
+	Voting{content} to VotingContent{voting}
 }
 
 relationship OneToMany	{

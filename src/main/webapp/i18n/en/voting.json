@@ -16,8 +16,9 @@
                 "title": "Voting"
             },
             "name": "Name",
-            "startDateTime": "Start Date Time",
-            "endDateTime": "End Date Time",
+            "startDate": "Start Date",
+            "endDate": "End Date",
+            "content": "Content",
             "encryption": "Encryption",
             "votes": "Votes",
             "owner": "Owner"
