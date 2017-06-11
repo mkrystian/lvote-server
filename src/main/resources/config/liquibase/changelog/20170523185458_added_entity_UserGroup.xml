@@ -44,6 +44,16 @@
             </column>
         </createTable>
 
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/user_group.csv"
+                  separator=","
+                  tableName="user_group"/>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/user_group_members.csv"
+                  separator=","
+                  tableName="user_group_members"/>
+
         <addPrimaryKey columnNames="user_groups_id, members_id" tableName="user_group_members"/>
 
     </changeSet>
