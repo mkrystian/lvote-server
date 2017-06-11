@@ -15,6 +15,7 @@
             "detail": {
                 "title": "Vote"
             },
+            "answer": "Answer",
             "voting": "Voting",
             "owner": "Owner"
         }

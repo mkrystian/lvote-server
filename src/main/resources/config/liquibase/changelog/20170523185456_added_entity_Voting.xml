@@ -21,28 +21,32 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
 
             <column name="start_date" type="date">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="end_date" type="date">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="content_id" type="bigint">
                 <constraints unique="true" nullable="true"/>
             </column>
             <column name="encryption_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="true" nullable="true"/>
             </column>
             <column name="owner_id" type="bigint">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
 
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/voting.csv"
+                  separator=","
+                  tableName="voting"/>
     </changeSet>
 </databaseChangeLog>

@@ -4,6 +4,10 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="lvoteApp.vote.answer">Answer</span></dt>
+        <dd>
+            <span>{{vm.vote.answer}}</span>
+        </dd>
         <dt><span data-translate="lvoteApp.vote.voting">Voting</span></dt>
         <dd>
             <a ui-sref="voting-detail({id:vm.vote.voting.id})">{{vm.vote.voting.id}}</a>

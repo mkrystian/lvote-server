@@ -4,6 +4,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -21,6 +22,10 @@ public class Vote implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    @Column(name = "answer", nullable = false)
+    private Integer answer;
+
     @ManyToOne
     private Voting voting;
 
@@ -33,6 +38,19 @@ public class Vote implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getAnswer() {
+        return answer;
+    }
+
+    public Vote answer(Integer answer) {
+        this.answer = answer;
+        return this;
+    }
+
+    public void setAnswer(Integer answer) {
+        this.answer = answer;
     }
 
     public Voting getVoting() {
@@ -85,6 +103,7 @@ public class Vote implements Serializable {
     public String toString() {
         return "Vote{" +
             "id=" + getId() +
+            ", answer='" + getAnswer() + "'" +
             "}";
     }
 }

@@ -16,6 +16,7 @@ entity UserGroup {
 
 entity Vote	{
 	id Long required
+    answer Integer required
 }
 
 entity EncryptionData	{

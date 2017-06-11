@@ -1,11 +1,9 @@
 package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import lvote.mprezes.student.agh.edu.pl.LvoteApp;
-
 import lvote.mprezes.student.agh.edu.pl.domain.Vote;
 import lvote.mprezes.student.agh.edu.pl.repository.VoteRepository;
 import lvote.mprezes.student.agh.edu.pl.web.rest.errors.ExceptionTranslator;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = LvoteApp.class)
 public class VoteResourceIntTest {
+
+    private static final Integer DEFAULT_ANSWER = 1;
+    private static final Integer UPDATED_ANSWER = 2;
 
     @Autowired
     private VoteRepository voteRepository;
@@ -73,7 +74,8 @@ public class VoteResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static Vote createEntity(EntityManager em) {
-        Vote vote = new Vote();
+        Vote vote = new Vote()
+            .answer(DEFAULT_ANSWER);
         return vote;
     }
 
@@ -97,6 +99,7 @@ public class VoteResourceIntTest {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeCreate + 1);
         Vote testVote = voteList.get(voteList.size() - 1);
+        assertThat(testVote.getAnswer()).isEqualTo(DEFAULT_ANSWER);
     }
 
     @Test
@@ -120,6 +123,24 @@ public class VoteResourceIntTest {
 
     @Test
     @Transactional
+    public void checkAnswerIsRequired() throws Exception {
+        int databaseSizeBeforeTest = voteRepository.findAll().size();
+        // set the field null
+        vote.setAnswer(null);
+
+        // Create the Vote, which fails.
+
+        restVoteMockMvc.perform(post("/api/votes")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(vote)))
+            .andExpect(status().isBadRequest());
+
+        List<Vote> voteList = voteRepository.findAll();
+        assertThat(voteList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllVotes() throws Exception {
         // Initialize the database
         voteRepository.saveAndFlush(vote);
@@ -128,7 +149,8 @@ public class VoteResourceIntTest {
         restVoteMockMvc.perform(get("/api/votes?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(vote.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(vote.getId().intValue())))
+            .andExpect(jsonPath("$.[*].answer").value(hasItem(DEFAULT_ANSWER)));
     }
 
     @Test
@@ -141,7 +163,8 @@ public class VoteResourceIntTest {
         restVoteMockMvc.perform(get("/api/votes/{id}", vote.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(vote.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(vote.getId().intValue()))
+            .andExpect(jsonPath("$.answer").value(DEFAULT_ANSWER));
     }
 
     @Test
@@ -161,6 +184,8 @@ public class VoteResourceIntTest {
 
         // Update the vote
         Vote updatedVote = voteRepository.findOne(vote.getId());
+        updatedVote
+            .answer(UPDATED_ANSWER);
 
         restVoteMockMvc.perform(put("/api/votes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -171,6 +196,7 @@ public class VoteResourceIntTest {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeUpdate);
         Vote testVote = voteList.get(voteList.size() - 1);
+        assertThat(testVote.getAnswer()).isEqualTo(UPDATED_ANSWER);
     }
 
     @Test
