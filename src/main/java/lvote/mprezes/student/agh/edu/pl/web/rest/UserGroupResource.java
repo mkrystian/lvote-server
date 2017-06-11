@@ -114,4 +114,28 @@ public class UserGroupResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    /**
+     * GET  /user-groups : get all the userGroups user own
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of userGroups in body
+     */
+    @GetMapping("/user-groups-owned")
+    @Timed
+    public List<UserGroup> getAllUserGroupsOwned() {
+        log.debug("REST request to get all owned UserGroups");
+        return userGroupRepository.findByOwnerIsCurrentUser();
+    }
+
+    /**
+     * GET  /user-groups : get all the userGroups current user belongs to
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of userGroups in body
+     */
+    @GetMapping("/user-groups-belongs")
+    @Timed
+    public List<UserGroup> getAllUserGroupsUserBelongs() {
+        log.debug("REST request to get all UserGroups user belongs to");
+        return userGroupRepository.findAllByMembersContainingCurrentUser();
+    }
+
 }
