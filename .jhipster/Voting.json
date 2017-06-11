@@ -28,6 +28,12 @@
             "relationshipName": "owner",
             "otherEntityName": "user",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "userGroup",
+            "otherEntityName": "userGroup",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
         }
     ],
     "fields": [

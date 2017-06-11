@@ -31,7 +31,7 @@ relationship OneToMany	{
 	Voting{votes} to Vote
 }
 
-relationship ManyToOne	{
+relationship OneToMany	{
 	UserGroup{votings} to Voting
 }
 

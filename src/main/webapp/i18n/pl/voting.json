@@ -21,7 +21,8 @@
             "content": "Content",
             "encryption": "Encryption",
             "votes": "Votes",
-            "owner": "Owner"
+            "owner": "Owner",
+            "userGroup": "User Group"
         }
     }
 }

@@ -25,6 +25,7 @@
                     <th><span data-translate="lvoteApp.voting.content">Content</span></th>
                     <th><span data-translate="lvoteApp.voting.encryption">Encryption</span></th>
                     <th><span data-translate="lvoteApp.voting.owner">Owner</span></th>
+                    <th><span data-translate="lvoteApp.voting.userGroup">User Group</span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -42,6 +43,9 @@
                     </td>
                     <td>
                         {{voting.owner.id}}
+                    </td>
+                    <td>
+                        <a ui-sref="user-group-detail({id:voting.userGroup.id})">{{voting.userGroup.id}}</a>
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">

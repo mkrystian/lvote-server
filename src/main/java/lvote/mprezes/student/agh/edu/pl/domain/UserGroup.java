@@ -1,5 +1,6 @@
 package lvote.mprezes.student.agh.edu.pl.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -26,8 +27,10 @@ public class UserGroup implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
-    private Voting votings;
+    @OneToMany(mappedBy = "userGroup")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Voting> votings = new HashSet<>();
 
     @ManyToOne
     private User owner;
@@ -60,17 +63,29 @@ public class UserGroup implements Serializable {
         this.name = name;
     }
 
-    public Voting getVotings() {
+    public Set<Voting> getVotings() {
         return votings;
     }
 
-    public UserGroup votings(Voting voting) {
-        this.votings = voting;
+    public UserGroup votings(Set<Voting> votings) {
+        this.votings = votings;
         return this;
     }
 
-    public void setVotings(Voting voting) {
-        this.votings = voting;
+    public UserGroup addVotings(Voting voting) {
+        this.votings.add(voting);
+        voting.setUserGroup(this);
+        return this;
+    }
+
+    public UserGroup removeVotings(Voting voting) {
+        this.votings.remove(voting);
+        voting.setUserGroup(null);
+        return this;
+    }
+
+    public void setVotings(Set<Voting> votings) {
+        this.votings = votings;
     }
 
     public User getOwner() {

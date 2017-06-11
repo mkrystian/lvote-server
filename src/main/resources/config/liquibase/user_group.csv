@@ -1,4 +1,4 @@
-id,name,votings_id,owner_id
-1,"Company employees",NULL,5
-2,Friends,NULL,5
-3,Neighbors,NULL,6
+id,name,owner_id
+1,"Company employees",5
+2,Friends,5
+3,Neighbors,6

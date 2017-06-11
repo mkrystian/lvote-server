@@ -1,11 +1,10 @@
 package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
 import lvote.mprezes.student.agh.edu.pl.domain.Voting;
-
 import lvote.mprezes.student.agh.edu.pl.repository.VotingRepository;
 import lvote.mprezes.student.agh.edu.pl.web.rest.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class VotingResource {
     private final Logger log = LoggerFactory.getLogger(VotingResource.class);
 
     private static final String ENTITY_NAME = "voting";
-        
+
     private final VotingRepository votingRepository;
 
     public VotingResource(VotingRepository votingRepository) {

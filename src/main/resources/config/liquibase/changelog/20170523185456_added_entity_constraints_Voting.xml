@@ -26,5 +26,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
+        <addForeignKeyConstraint baseColumnNames="user_group_id"
+                                 baseTableName="voting"
+                                 constraintName="fk_voting_user_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_group"/>
+
     </changeSet>
 </databaseChangeLog>

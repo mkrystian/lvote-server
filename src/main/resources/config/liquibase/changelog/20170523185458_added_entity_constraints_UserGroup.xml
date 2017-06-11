@@ -8,12 +8,6 @@
     -->
     <changeSet id="20170523185458-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="votings_id"
-                                 baseTableName="user_group"
-                                 constraintName="fk_user_group_votings_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="voting"/>
-
         <addForeignKeyConstraint baseColumnNames="owner_id"
                                  baseTableName="user_group"
                                  constraintName="fk_user_group_owner_id"

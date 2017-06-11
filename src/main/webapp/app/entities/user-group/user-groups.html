@@ -20,7 +20,6 @@
                 <tr>
                     <th><span data-translate="global.field.id">ID</span></th>
                     <th><span data-translate="lvoteApp.userGroup.name">Name</span></th>
-                    <th><span data-translate="lvoteApp.userGroup.votings">Votings</span></th>
                     <th><span data-translate="lvoteApp.userGroup.owner">Owner</span></th>
                     <th><span data-translate="lvoteApp.userGroup.members">Members</span></th>
                     <th></th>
@@ -30,9 +29,6 @@
                 <tr ng-repeat="userGroup in vm.userGroups track by userGroup.id">
                     <td><a ui-sref="user-group-detail({id:userGroup.id})">{{userGroup.id}}</a></td>
                     <td>{{userGroup.name}}</td>
-                    <td>
-                        <a ui-sref="voting-detail({id:userGroup.votings.id})">{{userGroup.votings.id}}</a>
-                    </td>
                     <td>
                         {{userGroup.owner.id}}
                     </td>

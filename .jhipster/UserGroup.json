@@ -2,10 +2,10 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipType": "many-to-one",
+            "relationshipType": "one-to-many",
             "relationshipName": "votings",
             "otherEntityName": "voting",
-            "otherEntityField": "id"
+            "otherEntityRelationshipName": "userGroup"
         },
         {
             "relationshipType": "many-to-one",

@@ -53,6 +53,9 @@ public class Voting implements Serializable {
     @ManyToOne
     private User owner;
 
+    @ManyToOne
+    private UserGroup userGroup;
+
     public Long getId() {
         return id;
     }
@@ -162,6 +165,19 @@ public class Voting implements Serializable {
 
     public void setOwner(User user) {
         this.owner = user;
+    }
+
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public Voting userGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
+        return this;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
     }
 
     @Override
