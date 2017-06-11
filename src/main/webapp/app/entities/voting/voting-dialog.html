@@ -79,6 +79,12 @@
             </select>
         </div>
         <div class="form-group">
+            <label data-translate="lvoteApp.voting.alreadyVoted" for="field_alreadyVoted">Already Voted</label>
+            <select class="form-control" id="field_alreadyVoted" multiple name="alreadyVoted"
+                    ng-model="vm.voting.alreadyVoteds"
+                    ng-options="user as user.id for user in vm.users track by user.id"></select>
+        </div>
+        <div class="form-group">
             <label data-translate="lvoteApp.voting.userGroup" for="field_userGroup">User Group</label>
             <select class="form-control" id="field_userGroup" name="userGroup" ng-model="vm.voting.userGroup"
                     ng-options="userGroup as userGroup.id for userGroup in vm.usergroups track by userGroup.id">

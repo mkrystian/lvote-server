@@ -28,6 +28,12 @@
         <dd>
             {{vm.voting.owner.id}}
         </dd>
+        <dt><span data-translate="lvoteApp.voting.alreadyVoted">Already Voted</span></dt>
+        <dd>
+            <span ng-repeat="alreadyVoted in vm.voting.alreadyVoteds">
+                {{alreadyVoted.id}}{{$last ? '' : ', '}}
+            </span>
+        </dd>
         <dt><span data-translate="lvoteApp.voting.userGroup">User Group</span></dt>
         <dd>
             <a ui-sref="user-group-detail({id:vm.voting.userGroup.id})">{{vm.voting.userGroup.id}}</a>

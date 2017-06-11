@@ -52,5 +52,17 @@
                   file="config/liquibase/voting.csv"
                   separator=","
                   tableName="voting"/>
+
+        <createTable tableName="voting_already_voted">
+            <column name="already_voteds_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="votings_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="votings_id, already_voteds_id" tableName="voting_already_voted"/>
+
     </changeSet>
 </databaseChangeLog>

@@ -53,6 +53,13 @@ public class Voting implements Serializable {
     @ManyToOne
     private User owner;
 
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "voting_already_voted",
+        joinColumns = @JoinColumn(name = "votings_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "already_voteds_id", referencedColumnName = "id"))
+    private Set<User> alreadyVoteds = new HashSet<>();
+
     @ManyToOne
     private UserGroup userGroup;
 
@@ -165,6 +172,29 @@ public class Voting implements Serializable {
 
     public void setOwner(User user) {
         this.owner = user;
+    }
+
+    public Set<User> getAlreadyVoteds() {
+        return alreadyVoteds;
+    }
+
+    public Voting alreadyVoteds(Set<User> users) {
+        this.alreadyVoteds = users;
+        return this;
+    }
+
+    public Voting addAlreadyVoted(User user) {
+        this.alreadyVoteds.add(user);
+        return this;
+    }
+
+    public Voting removeAlreadyVoted(User user) {
+        this.alreadyVoteds.remove(user);
+        return this;
+    }
+
+    public void setAlreadyVoteds(Set<User> users) {
+        this.alreadyVoteds = users;
     }
 
     public UserGroup getUserGroup() {

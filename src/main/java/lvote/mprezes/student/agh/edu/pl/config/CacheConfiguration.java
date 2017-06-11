@@ -49,6 +49,7 @@ public class CacheConfiguration {
             cm.createCache(lvote.mprezes.student.agh.edu.pl.domain.EncryptionData.class.getName(), jcacheConfiguration);
             cm.createCache(lvote.mprezes.student.agh.edu.pl.domain.UserGroup.class.getName() + ".members", jcacheConfiguration);
             cm.createCache(lvote.mprezes.student.agh.edu.pl.domain.UserGroup.class.getName() + ".votings", jcacheConfiguration);
+            cm.createCache(lvote.mprezes.student.agh.edu.pl.domain.Voting.class.getName() + ".alreadyVoteds", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }

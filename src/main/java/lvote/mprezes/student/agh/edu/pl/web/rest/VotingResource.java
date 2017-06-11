@@ -84,7 +84,7 @@ public class VotingResource {
     @Timed
     public List<Voting> getAllVotings() {
         log.debug("REST request to get all Votings");
-        List<Voting> votings = votingRepository.findAll();
+        List<Voting> votings = votingRepository.findAllWithEagerRelationships();
         return votings;
     }
 
@@ -98,7 +98,7 @@ public class VotingResource {
     @Timed
     public ResponseEntity<Voting> getVoting(@PathVariable Long id) {
         log.debug("REST request to get Voting : {}", id);
-        Voting voting = votingRepository.findOne(id);
+        Voting voting = votingRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(voting));
     }
 

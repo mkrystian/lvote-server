@@ -25,6 +25,7 @@
                     <th><span data-translate="lvoteApp.voting.content">Content</span></th>
                     <th><span data-translate="lvoteApp.voting.encryption">Encryption</span></th>
                     <th><span data-translate="lvoteApp.voting.owner">Owner</span></th>
+                    <th><span data-translate="lvoteApp.voting.alreadyVoted">Already Voted</span></th>
                     <th><span data-translate="lvoteApp.voting.userGroup">User Group</span></th>
                     <th></th>
                 </tr>
@@ -43,6 +44,11 @@
                     </td>
                     <td>
                         {{voting.owner.id}}
+                    </td>
+                    <td>
+                        <span ng-repeat="alreadyVoted in voting.alreadyVoteds">
+                            {{alreadyVoted.id}}{{$last ? '' : ', '}}
+                        </span>
                     </td>
                     <td>
                         <a ui-sref="user-group-detail({id:voting.userGroup.id})">{{voting.userGroup.id}}</a>

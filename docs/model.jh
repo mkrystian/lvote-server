@@ -23,6 +23,10 @@ entity EncryptionData	{
 
 }
 
+relationship ManyToMany {
+	Voting{alreadyVoted} to User
+}
+
 relationship OneToOne {
 	Voting{content} to VotingContent{voting}
 }
