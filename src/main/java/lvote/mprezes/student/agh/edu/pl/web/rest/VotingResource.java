@@ -120,7 +120,7 @@ public class VotingResource {
      *
      * @return the ResponseEntity with status 200 (OK) and the list of votings in body
      */
-    @GetMapping("/votings_owned")
+    @GetMapping("/votings-owned")
     @Timed
     public List<Voting> getAllVotingsOwnedByUser() {
         log.debug("REST request to get all Votings owned by user");
@@ -132,7 +132,7 @@ public class VotingResource {
      *
      * @return the ResponseEntity with status 200 (OK) and the list of votings in body
      */
-    @GetMapping("/votings_available")
+    @GetMapping("/votings-available")
     @Timed
     public List<Voting> getAllVotingsAvailableForUser() {
         log.debug("REST request to get all Votings available for user");
