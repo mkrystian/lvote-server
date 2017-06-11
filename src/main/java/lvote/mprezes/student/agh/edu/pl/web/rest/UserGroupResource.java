@@ -83,8 +83,7 @@ public class UserGroupResource {
     @Timed
     public List<UserGroup> getAllUserGroups() {
         log.debug("REST request to get all UserGroups");
-        List<UserGroup> userGroups = userGroupRepository.findAllWithEagerRelationships();
-        return userGroups;
+        return userGroupRepository.findAll();
     }
 
     /**

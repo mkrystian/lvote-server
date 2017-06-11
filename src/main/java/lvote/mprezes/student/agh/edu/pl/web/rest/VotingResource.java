@@ -84,8 +84,7 @@ public class VotingResource {
     @Timed
     public List<Voting> getAllVotings() {
         log.debug("REST request to get all Votings");
-        List<Voting> votings = votingRepository.findAllWithEagerRelationships();
-        return votings;
+        return votingRepository.findAll();
     }
 
     /**
@@ -114,6 +113,30 @@ public class VotingResource {
         log.debug("REST request to delete Voting : {}", id);
         votingRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * GET  /votings : get all the votings owned by user
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of votings in body
+     */
+    @GetMapping("/votings_owned")
+    @Timed
+    public List<Voting> getAllVotingsOwnedByUser() {
+        log.debug("REST request to get all Votings owned by user");
+        return votingRepository.findByOwnerIsCurrentUser();
+    }
+
+    /**
+     * GET  /votings : get all the votings available for user ( by user group permission)
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of votings in body
+     */
+    @GetMapping("/votings_available")
+    @Timed
+    public List<Voting> getAllVotingsAvailableForUser() {
+        log.debug("REST request to get all Votings available for user");
+        return votingRepository.findAllByUserGroupContainingCurrentUser();
     }
 
 }

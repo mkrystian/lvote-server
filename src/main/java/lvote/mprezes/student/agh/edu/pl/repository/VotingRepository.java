@@ -22,4 +22,7 @@ public interface VotingRepository extends JpaRepository<Voting,Long> {
     @Query("select voting from Voting voting left join fetch voting.alreadyVoteds where voting.id =:id")
     Voting findOneWithEagerRelationships(@Param("id") Long id);
 
+    @Query("select voting from Voting voting join fetch voting.userGroup ug join fetch ug.members mb where mb.login = ?#{principal.username}")
+    List<Voting> findAllByUserGroupContainingCurrentUser();
+
 }

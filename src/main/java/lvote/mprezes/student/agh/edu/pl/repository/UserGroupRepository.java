@@ -22,4 +22,7 @@ public interface UserGroupRepository extends JpaRepository<UserGroup,Long> {
     @Query("select userGroup from UserGroup userGroup left join fetch userGroup.members where userGroup.id =:id")
     UserGroup findOneWithEagerRelationships(@Param("id") Long id);
 
+    @Query("select userGroup from UserGroup userGroup join fetch userGroup.members mb where mb.login = ?#{principal.username}")
+    List<UserGroup> findAllByMembersContainingCurrentUser();
+
 }
