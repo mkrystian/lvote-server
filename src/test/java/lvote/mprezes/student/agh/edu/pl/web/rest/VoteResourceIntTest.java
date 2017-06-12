@@ -35,8 +35,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = LvoteApp.class)
 public class VoteResourceIntTest {
 
-    private static final Integer DEFAULT_ANSWER = 1;
-    private static final Integer UPDATED_ANSWER = 2;
+    private static final Long DEFAULT_VOTING_ID = 1L;
+    private static final Long UPDATED_VOTING_ID = 2L;
+
+    private static final Long DEFAULT_ANSWER_ID = 1L;
+    private static final Long UPDATED_ANSWER_ID = 2L;
+
+    private static final Long DEFAULT_RANDOM_NUMBER = 1L;
+    private static final Long UPDATED_RANDOM_NUMBER = 2L;
 
     @Autowired
     private VoteRepository voteRepository;
@@ -75,7 +81,9 @@ public class VoteResourceIntTest {
      */
     public static Vote createEntity(EntityManager em) {
         Vote vote = new Vote()
-            .answer(DEFAULT_ANSWER);
+            .votingId(DEFAULT_VOTING_ID)
+            .answerId(DEFAULT_ANSWER_ID)
+            .randomNumber(DEFAULT_RANDOM_NUMBER);
         return vote;
     }
 
@@ -99,7 +107,9 @@ public class VoteResourceIntTest {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeCreate + 1);
         Vote testVote = voteList.get(voteList.size() - 1);
-        assertThat(testVote.getAnswer()).isEqualTo(DEFAULT_ANSWER);
+        assertThat(testVote.getVotingId()).isEqualTo(DEFAULT_VOTING_ID);
+        assertThat(testVote.getAnswerId()).isEqualTo(DEFAULT_ANSWER_ID);
+        assertThat(testVote.getRandomNumber()).isEqualTo(DEFAULT_RANDOM_NUMBER);
     }
 
     @Test
@@ -123,24 +133,6 @@ public class VoteResourceIntTest {
 
     @Test
     @Transactional
-    public void checkAnswerIsRequired() throws Exception {
-        int databaseSizeBeforeTest = voteRepository.findAll().size();
-        // set the field null
-        vote.setAnswer(null);
-
-        // Create the Vote, which fails.
-
-        restVoteMockMvc.perform(post("/api/votes")
-            .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(vote)))
-            .andExpect(status().isBadRequest());
-
-        List<Vote> voteList = voteRepository.findAll();
-        assertThat(voteList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllVotes() throws Exception {
         // Initialize the database
         voteRepository.saveAndFlush(vote);
@@ -150,7 +142,9 @@ public class VoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(vote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].answer").value(hasItem(DEFAULT_ANSWER)));
+            .andExpect(jsonPath("$.[*].votingId").value(hasItem(DEFAULT_VOTING_ID.intValue())))
+            .andExpect(jsonPath("$.[*].answerId").value(hasItem(DEFAULT_ANSWER_ID.intValue())))
+            .andExpect(jsonPath("$.[*].randomNumber").value(hasItem(DEFAULT_RANDOM_NUMBER.intValue())));
     }
 
     @Test
@@ -164,7 +158,9 @@ public class VoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(vote.getId().intValue()))
-            .andExpect(jsonPath("$.answer").value(DEFAULT_ANSWER));
+            .andExpect(jsonPath("$.votingId").value(DEFAULT_VOTING_ID.intValue()))
+            .andExpect(jsonPath("$.answerId").value(DEFAULT_ANSWER_ID.intValue()))
+            .andExpect(jsonPath("$.randomNumber").value(DEFAULT_RANDOM_NUMBER.intValue()));
     }
 
     @Test
@@ -185,7 +181,9 @@ public class VoteResourceIntTest {
         // Update the vote
         Vote updatedVote = voteRepository.findOne(vote.getId());
         updatedVote
-            .answer(UPDATED_ANSWER);
+            .votingId(UPDATED_VOTING_ID)
+            .answerId(UPDATED_ANSWER_ID)
+            .randomNumber(UPDATED_RANDOM_NUMBER);
 
         restVoteMockMvc.perform(put("/api/votes")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -196,7 +194,9 @@ public class VoteResourceIntTest {
         List<Vote> voteList = voteRepository.findAll();
         assertThat(voteList).hasSize(databaseSizeBeforeUpdate);
         Vote testVote = voteList.get(voteList.size() - 1);
-        assertThat(testVote.getAnswer()).isEqualTo(UPDATED_ANSWER);
+        assertThat(testVote.getVotingId()).isEqualTo(UPDATED_VOTING_ID);
+        assertThat(testVote.getAnswerId()).isEqualTo(UPDATED_ANSWER_ID);
+        assertThat(testVote.getRandomNumber()).isEqualTo(UPDATED_RANDOM_NUMBER);
     }
 
     @Test

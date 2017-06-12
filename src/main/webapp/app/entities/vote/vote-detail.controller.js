@@ -5,9 +5,9 @@
         .module('lvoteApp')
         .controller('VoteDetailController', VoteDetailController);
 
-    VoteDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Vote', 'Voting', 'User'];
+    VoteDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Vote'];
 
-    function VoteDetailController($scope, $rootScope, $stateParams, previousState, entity, Vote, Voting, User) {
+    function VoteDetailController($scope, $rootScope, $stateParams, previousState, entity, Vote) {
         var vm = this;
 
         vm.vote = entity;

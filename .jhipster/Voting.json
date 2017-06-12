@@ -18,12 +18,6 @@
             "otherEntityRelationshipName": "voting"
         },
         {
-            "relationshipType": "one-to-many",
-            "relationshipName": "votes",
-            "otherEntityName": "vote",
-            "otherEntityRelationshipName": "voting"
-        },
-        {
             "relationshipType": "many-to-one",
             "relationshipName": "owner",
             "otherEntityName": "user",

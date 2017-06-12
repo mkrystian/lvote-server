@@ -9,18 +9,29 @@ entity VotingContent	{
 	question String required,
 }
 
+entity VotingAnswer {
+	id Long required,
+    answer String required
+}
+
 entity UserGroup {
 	id Long required,
     name String
 }
 
 entity Vote	{
-	id Long required
-    answer Integer required
+	id Long required,
+    votingId Long,
+    answerId Long,
+    randomNumber Long
 }
 
 entity EncryptionData	{
 
+}
+
+relationship OneToMany {
+	VotingContent{answers} to VotingAnswer
 }
 
 relationship ManyToMany {
@@ -29,10 +40,6 @@ relationship ManyToMany {
 
 relationship OneToOne {
 	Voting{content} to VotingContent{voting}
-}
-
-relationship OneToMany	{
-	Voting{votes} to Vote
 }
 
 relationship OneToMany	{
@@ -51,9 +58,6 @@ relationship ManyToOne	{
 	UserGroup{owner} to User
 }
 
-relationship ManyToOne	{
-	Vote{owner} to User
-}
 
 relationship OneToOne	{
 	Voting{encryption} to EncryptionData

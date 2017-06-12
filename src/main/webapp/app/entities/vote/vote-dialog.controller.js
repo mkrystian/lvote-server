@@ -5,16 +5,14 @@
         .module('lvoteApp')
         .controller('VoteDialogController', VoteDialogController);
 
-    VoteDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Vote', 'Voting', 'User'];
+    VoteDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'Vote'];
 
-    function VoteDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, Vote, Voting, User) {
+    function VoteDialogController($timeout, $scope, $stateParams, $uibModalInstance, entity, Vote) {
         var vm = this;
 
         vm.vote = entity;
         vm.clear = clear;
         vm.save = save;
-        vm.votings = Voting.query();
-        vm.users = User.query();
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();

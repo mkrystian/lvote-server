@@ -4,17 +4,17 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
-        <dt><span data-translate="lvoteApp.vote.answer">Answer</span></dt>
+        <dt><span data-translate="lvoteApp.vote.votingId">Voting Id</span></dt>
         <dd>
-            <span>{{vm.vote.answer}}</span>
+            <span>{{vm.vote.votingId}}</span>
         </dd>
-        <dt><span data-translate="lvoteApp.vote.voting">Voting</span></dt>
+        <dt><span data-translate="lvoteApp.vote.answerId">Answer Id</span></dt>
         <dd>
-            <a ui-sref="voting-detail({id:vm.vote.voting.id})">{{vm.vote.voting.id}}</a>
+            <span>{{vm.vote.answerId}}</span>
         </dd>
-        <dt><span data-translate="lvoteApp.vote.owner">Owner</span></dt>
+        <dt><span data-translate="lvoteApp.vote.randomNumber">Random Number</span></dt>
         <dd>
-            {{vm.vote.owner.id}}
+            <span>{{vm.vote.randomNumber}}</span>
         </dd>
     </dl>
 

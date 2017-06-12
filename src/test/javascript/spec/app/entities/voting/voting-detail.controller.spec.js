@@ -4,8 +4,7 @@ describe('Controller Tests', function() {
 
     describe('Voting Management Detail Controller', function() {
         var $scope, $rootScope;
-        var MockEntity, MockPreviousState, MockVoting, MockVotingContent, MockEncryptionData, MockVote, MockUser,
-            MockUserGroup;
+        var MockEntity, MockPreviousState, MockVoting, MockVotingContent, MockEncryptionData, MockUser, MockUserGroup;
         var createController;
 
         beforeEach(inject(function($injector) {
@@ -16,7 +15,6 @@ describe('Controller Tests', function() {
             MockVoting = jasmine.createSpy('MockVoting');
             MockVotingContent = jasmine.createSpy('MockVotingContent');
             MockEncryptionData = jasmine.createSpy('MockEncryptionData');
-            MockVote = jasmine.createSpy('MockVote');
             MockUser = jasmine.createSpy('MockUser');
             MockUserGroup = jasmine.createSpy('MockUserGroup');
 
@@ -29,7 +27,6 @@ describe('Controller Tests', function() {
                 'Voting': MockVoting,
                 'VotingContent': MockVotingContent,
                 'EncryptionData': MockEncryptionData,
-                'Vote': MockVote,
                 'User': MockUser,
                 'UserGroup': MockUserGroup
             };

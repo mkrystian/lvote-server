@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,15 +21,14 @@ public class Vote implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column(name = "answer", nullable = false)
-    private Integer answer;
+    @Column(name = "voting_id")
+    private Long votingId;
 
-    @ManyToOne
-    private Voting voting;
+    @Column(name = "answer_id")
+    private Long answerId;
 
-    @ManyToOne
-    private User owner;
+    @Column(name = "random_number")
+    private Long randomNumber;
 
     public Long getId() {
         return id;
@@ -40,43 +38,43 @@ public class Vote implements Serializable {
         this.id = id;
     }
 
-    public Integer getAnswer() {
-        return answer;
+    public Long getVotingId() {
+        return votingId;
     }
 
-    public Vote answer(Integer answer) {
-        this.answer = answer;
+    public Vote votingId(Long votingId) {
+        this.votingId = votingId;
         return this;
     }
 
-    public void setAnswer(Integer answer) {
-        this.answer = answer;
+    public void setVotingId(Long votingId) {
+        this.votingId = votingId;
     }
 
-    public Voting getVoting() {
-        return voting;
+    public Long getAnswerId() {
+        return answerId;
     }
 
-    public Vote voting(Voting voting) {
-        this.voting = voting;
+    public Vote answerId(Long answerId) {
+        this.answerId = answerId;
         return this;
     }
 
-    public void setVoting(Voting voting) {
-        this.voting = voting;
+    public void setAnswerId(Long answerId) {
+        this.answerId = answerId;
     }
 
-    public User getOwner() {
-        return owner;
+    public Long getRandomNumber() {
+        return randomNumber;
     }
 
-    public Vote owner(User user) {
-        this.owner = user;
+    public Vote randomNumber(Long randomNumber) {
+        this.randomNumber = randomNumber;
         return this;
     }
 
-    public void setOwner(User user) {
-        this.owner = user;
+    public void setRandomNumber(Long randomNumber) {
+        this.randomNumber = randomNumber;
     }
 
     @Override
@@ -103,7 +101,9 @@ public class Vote implements Serializable {
     public String toString() {
         return "Vote{" +
             "id=" + getId() +
-            ", answer='" + getAnswer() + "'" +
+            ", votingId='" + getVotingId() + "'" +
+            ", answerId='" + getAnswerId() + "'" +
+            ", randomNumber='" + getRandomNumber() + "'" +
             "}";
     }
 }

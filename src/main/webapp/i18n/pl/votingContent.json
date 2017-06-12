@@ -16,6 +16,7 @@
                 "title": "Voting Content"
             },
             "question": "Question",
+            "answers": "Answers",
             "voting": "Voting"
         }
     }

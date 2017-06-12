@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -42,7 +41,7 @@ public class VoteResource {
      */
     @PostMapping("/votes")
     @Timed
-    public ResponseEntity<Vote> createVote(@Valid @RequestBody Vote vote) throws URISyntaxException {
+    public ResponseEntity<Vote> createVote(@RequestBody Vote vote) throws URISyntaxException {
         log.debug("REST request to save Vote : {}", vote);
         if (vote.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new vote cannot already have an ID")).body(null);
@@ -64,7 +63,7 @@ public class VoteResource {
      */
     @PutMapping("/votes")
     @Timed
-    public ResponseEntity<Vote> updateVote(@Valid @RequestBody Vote vote) throws URISyntaxException {
+    public ResponseEntity<Vote> updateVote(@RequestBody Vote vote) throws URISyntaxException {
         log.debug("REST request to update Vote : {}", vote);
         if (vote.getId() == null) {
             return createVote(vote);

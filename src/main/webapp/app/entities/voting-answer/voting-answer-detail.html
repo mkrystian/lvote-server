@@ -1,0 +1,26 @@
+<div>
+    <h2><span data-translate="lvoteApp.votingAnswer.detail.title">Voting Answer</span> {{vm.votingAnswer.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="lvoteApp.votingAnswer.answer">Answer</span></dt>
+        <dd>
+            <span>{{vm.votingAnswer.answer}}</span>
+        </dd>
+        <dt><span data-translate="lvoteApp.votingAnswer.votingContent">Voting Content</span></dt>
+        <dd>
+            <a ui-sref="voting-content-detail({id:vm.votingAnswer.votingContent.id})">{{vm.votingAnswer.votingContent.id}}</a>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="voting-answer-detail.edit({id:vm.votingAnswer.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>

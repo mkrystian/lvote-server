@@ -2,6 +2,12 @@
     "fluentMethods": true,
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "relationshipName": "answers",
+            "otherEntityName": "votingAnswer",
+            "otherEntityRelationshipName": "votingContent"
+        },
+        {
             "relationshipType": "one-to-one",
             "relationshipName": "voting",
             "otherEntityName": "voting",

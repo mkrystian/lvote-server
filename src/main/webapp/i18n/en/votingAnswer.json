@@ -1,0 +1,22 @@
+{
+    "lvoteApp": {
+        "votingAnswer": {
+            "home": {
+                "title": "Voting Answers",
+                "createLabel": "Create a new Voting Answer",
+                "createOrEditLabel": "Create or edit a Voting Answer"
+            },
+            "created": "A new Voting Answer is created with identifier {{ param }}",
+            "updated": "A Voting Answer is updated with identifier {{ param }}",
+            "deleted": "A Voting Answer is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Voting Answer {{ id }}?"
+            },
+            "detail": {
+                "title": "Voting Answer"
+            },
+            "answer": "Answer",
+            "votingContent": "Voting Content"
+        }
+    }
+}

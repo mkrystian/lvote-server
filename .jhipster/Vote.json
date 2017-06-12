@@ -1,26 +1,18 @@
 {
     "fluentMethods": true,
-    "relationships": [
-        {
-            "relationshipName": "voting",
-            "otherEntityName": "voting",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "relationshipName": "owner",
-            "otherEntityName": "user",
-            "otherEntityField": "id"
-        }
-    ],
+    "relationships": [],
     "fields": [
         {
-            "fieldName": "answer",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "votingId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "answerId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "randomNumber",
+            "fieldType": "Long"
         }
     ],
     "changelogDate": "20170523185459",

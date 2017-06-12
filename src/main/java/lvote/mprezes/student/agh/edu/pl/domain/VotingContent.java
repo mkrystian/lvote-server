@@ -7,7 +7,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A VotingContent.
@@ -26,6 +28,11 @@ public class VotingContent implements Serializable {
     @NotNull
     @Column(name = "question", nullable = false)
     private String question;
+
+    @OneToMany(mappedBy = "votingContent")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<VotingAnswer> answers = new HashSet<>();
 
     @OneToOne(mappedBy = "content")
     @JsonIgnore
@@ -50,6 +57,31 @@ public class VotingContent implements Serializable {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public Set<VotingAnswer> getAnswers() {
+        return answers;
+    }
+
+    public VotingContent answers(Set<VotingAnswer> votingAnswers) {
+        this.answers = votingAnswers;
+        return this;
+    }
+
+    public VotingContent addAnswers(VotingAnswer votingAnswer) {
+        this.answers.add(votingAnswer);
+        votingAnswer.setVotingContent(this);
+        return this;
+    }
+
+    public VotingContent removeAnswers(VotingAnswer votingAnswer) {
+        this.answers.remove(votingAnswer);
+        votingAnswer.setVotingContent(null);
+        return this;
+    }
+
+    public void setAnswers(Set<VotingAnswer> votingAnswers) {
+        this.answers = votingAnswers;
     }
 
     public Voting getVoting() {

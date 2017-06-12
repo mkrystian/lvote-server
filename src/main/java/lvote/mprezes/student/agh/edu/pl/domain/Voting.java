@@ -1,6 +1,5 @@
 package lvote.mprezes.student.agh.edu.pl.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -44,11 +43,6 @@ public class Voting implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private EncryptionData encryption;
-
-    @OneToMany(mappedBy = "voting")
-    @JsonIgnore
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Vote> votes = new HashSet<>();
 
     @ManyToOne
     private User owner;
@@ -134,31 +128,6 @@ public class Voting implements Serializable {
 
     public void setEncryption(EncryptionData encryptionData) {
         this.encryption = encryptionData;
-    }
-
-    public Set<Vote> getVotes() {
-        return votes;
-    }
-
-    public Voting votes(Set<Vote> votes) {
-        this.votes = votes;
-        return this;
-    }
-
-    public Voting addVotes(Vote vote) {
-        this.votes.add(vote);
-        vote.setVoting(this);
-        return this;
-    }
-
-    public Voting removeVotes(Vote vote) {
-        this.votes.remove(vote);
-        vote.setVoting(null);
-        return this;
-    }
-
-    public void setVotes(Set<Vote> votes) {
-        this.votes = votes;
     }
 
     public User getOwner() {

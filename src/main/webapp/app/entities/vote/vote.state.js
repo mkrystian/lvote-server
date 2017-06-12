@@ -104,7 +104,9 @@
                     resolve: {
                         entity: function () {
                             return {
-                                answer: null,
+                                votingId: null,
+                                answerId: null,
+                                randomNumber: null,
                                 id: null
                             };
                         }

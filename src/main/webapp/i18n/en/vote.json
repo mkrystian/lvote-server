@@ -15,9 +15,9 @@
             "detail": {
                 "title": "Vote"
             },
-            "answer": "Answer",
-            "voting": "Voting",
-            "owner": "Owner"
+            "votingId": "Voting Id",
+            "answerId": "Answer Id",
+            "randomNumber": "Random Number"
         }
     }
 }

@@ -20,7 +20,6 @@
             "endDate": "End Date",
             "content": "Content",
             "encryption": "Encryption",
-            "votes": "Votes",
             "owner": "Owner",
             "alreadyVoted": "Already Voted",
             "userGroup": "User Group"

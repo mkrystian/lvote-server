@@ -5,14 +5,15 @@
         .module('lvoteApp')
         .controller('VotingContentDialogController', VotingContentDialogController);
 
-    VotingContentDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'VotingContent', 'Voting'];
+    VotingContentDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'VotingContent', 'VotingAnswer', 'Voting'];
 
-    function VotingContentDialogController($timeout, $scope, $stateParams, $uibModalInstance, entity, VotingContent, Voting) {
+    function VotingContentDialogController($timeout, $scope, $stateParams, $uibModalInstance, entity, VotingContent, VotingAnswer, Voting) {
         var vm = this;
 
         vm.votingContent = entity;
         vm.clear = clear;
         vm.save = save;
+        vm.votinganswers = VotingAnswer.query();
         vm.votings = Voting.query();
 
         $timeout(function (){

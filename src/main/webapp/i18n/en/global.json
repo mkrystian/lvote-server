@@ -12,6 +12,7 @@
                 "userGroup": "User Group",
                 "vote": "Vote",
                 "encryptionData": "Encryption Data",
+                "votingAnswer": "Voting Answer",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
