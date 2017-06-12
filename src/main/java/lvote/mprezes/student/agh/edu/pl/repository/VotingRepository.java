@@ -13,7 +13,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface VotingRepository extends JpaRepository<Voting, Long> {
 
-    @Query("select voting from Voting voting where voting.owner.login = ?#{principal.username}")
+    @Query("select voting from Voting voting left join fetch voting.alreadyVoteds where voting.owner.login = ?#{principal.username}")
     List<Voting> findByOwnerIsCurrentUser();
 
     @Query("select distinct voting from Voting voting left join fetch voting.alreadyVoteds")
@@ -22,7 +22,8 @@ public interface VotingRepository extends JpaRepository<Voting, Long> {
     @Query("select voting from Voting voting left join fetch voting.alreadyVoteds where voting.id =:id")
     Voting findOneWithEagerRelationships(@Param("id") Long id);
 
-    @Query("select distinct voting from Voting voting join fetch voting.userGroup ug join fetch ug.members mb left join fetch voting.alreadyVoteds av where mb.login = ?#{principal.username} and av.login = ?#{principal.username} or av.login is NULL ")
+    @Query("select voting from Voting voting join fetch voting.userGroup ug join fetch ug.members mb left " +
+        "join voting.alreadyVoteds av on av.login = ?#{principal.username} where mb.login = ?#{principal.username} and av.login is null ")
     List<Voting> findAllByUserGroupContainingCurrentUser();
 
 }
