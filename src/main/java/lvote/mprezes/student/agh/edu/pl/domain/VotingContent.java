@@ -30,7 +30,6 @@ public class VotingContent implements Serializable {
     private String question;
 
     @OneToMany(mappedBy = "votingContent")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<VotingAnswer> answers = new HashSet<>();
 

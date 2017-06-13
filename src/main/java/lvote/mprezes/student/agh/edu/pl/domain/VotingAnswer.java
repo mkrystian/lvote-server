@@ -1,5 +1,6 @@
 package lvote.mprezes.student.agh.edu.pl.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -27,6 +28,7 @@ public class VotingAnswer implements Serializable {
     private String answer;
 
     @ManyToOne
+    @JsonIgnore
     private VotingContent votingContent;
 
     public Long getId() {
