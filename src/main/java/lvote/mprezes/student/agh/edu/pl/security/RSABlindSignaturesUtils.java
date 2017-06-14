@@ -1,5 +1,7 @@
 package lvote.mprezes.student.agh.edu.pl.security;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.digests.SHA1Digest;
@@ -14,6 +16,7 @@ import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.bouncycastle.crypto.signers.PSSSigner;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -25,6 +28,10 @@ import java.security.SecureRandom;
 public class RSABlindSignaturesUtils {
 
     private static final String ENCODING_UTF8 = "UTF8";
+
+    private RSABlindSignaturesUtils() {
+
+    }
 
     /**
      * Generate 2048-bit RSA key pair of public and private key.
@@ -41,74 +48,243 @@ public class RSABlindSignaturesUtils {
         return generator.generateKeyPair();
     }
 
-    public static RSABlindingParameters generateRSABlindingParameters(@NotNull RSAKeyParameters publicKey) {
-        //Create random factor generator
+    /**
+     * Generate blinding parameters for blinding message.
+     *
+     * @param publicKey
+     * 		signer public key
+     *
+     * @return RSABlindingParameters
+     */
+    public static RSABlindingParameters generateRSABlindingParameters(@NotNull AsymmetricKeyParameter publicKey) {
         RSABlindingFactorGenerator blindingFactorGenerator
             = new RSABlindingFactorGenerator();
         blindingFactorGenerator.init(publicKey);
 
-        //Generate random factor
         BigInteger blindingFactor
             = blindingFactorGenerator.generateBlindingFactor();
 
-        // Generate blinding parameters
-        return new RSABlindingParameters(publicKey, blindingFactor);
+        return new RSABlindingParameters((RSAKeyParameters) publicKey, blindingFactor);
     }
 
     /**
-     * Blinds message passed as using blinding parameters.
+     * Blinds message passed as String using blinding parameters.
      *
      * @param message
      * 		String message to blind
      * @param blindingParameters
      * 		parameters needed to blind message
      *
-     * @return byte[] representation of blinded message
+     * @return RSABlindedMessage
      * @throws CryptoException
      * 		in case of any blinding problems
      */
-    public static byte[] blindMessage(@NotNull String message, @NotNull RSABlindingParameters blindingParameters) throws CryptoException {
+    public static RSABlindedMessage blindMessage(@NotNull String message, @NotNull RSABlindingParameters blindingParameters) throws CryptoException {
+        RSABlindedMessage result = new RSABlindedMessage();
+
         byte[] byteMessageRepresentation = stringToBytes(message);
 
         PSSSigner signer = new PSSSigner(new RSABlindingEngine(),
             new SHA1Digest(), 20);
         signer.init(true, blindingParameters);
 
-        // Blind message
         signer.update(byteMessageRepresentation, 0, byteMessageRepresentation.length);
 
-        return signer.generateSignature();
+        result.content = signer.generateSignature();
+
+        return result;
     }
 
-    public static byte[] unblindMessage(@NotNull byte[] signature, @NotNull RSABlindingParameters blindingParameters) {
-        // "Unblind" the bank's signature (so to speak) and create a new coin
-        // using the ID and the unblinded signature.
+    /**
+     * Returns unblinded signature with original message
+     *
+     * @param blindedSignature
+     * 		RSABlindedSignature
+     * @param originalMessage
+     * 		String representation of original value
+     * @param blindingParameters
+     * 		RSABlindingParameters
+     *
+     * @return Object containing unblinded signature and original message
+     */
+    public static RSAUnblindedSignature unblindSignature(@NotNull RSABlindedSignature blindedSignature, @NotNull String originalMessage, @NotNull RSABlindingParameters blindingParameters) {
+        RSAUnblindedSignature result = new RSAUnblindedSignature();
+
         RSABlindingEngine blindingEngine = new RSABlindingEngine();
         blindingEngine.init(false, blindingParameters);
 
-        return blindingEngine.processBlock(signature, 0, signature.length);
+        result.setOriginalMessage(originalMessage);
+        result.content = blindingEngine.processBlock(blindedSignature.content, 0, blindedSignature.content.length);
+
+        return result;
     }
 
-    public static byte[] signMessage(byte[] message, RSAKeyParameters privateKey) {
+    /**
+     * Signs blinded message with signer private key
+     *
+     * @param blindedMessage
+     * 		RSABlindedMessage
+     * @param privateKey
+     * 		signer private RSA key
+     *
+     * @return RSABlindedSignature
+     */
+    public static RSABlindedSignature signMessage(RSABlindedMessage blindedMessage, AsymmetricKeyParameter privateKey) {
+        RSABlindedSignature result = new RSABlindedSignature();
+
         RSAEngine engine = new RSAEngine();
         engine.init(true, privateKey);
 
-        return engine.processBlock(message, 0, message.length);
+        result.content = engine.processBlock(blindedMessage.content, 0, blindedMessage.content.length);
+
+        return result;
     }
 
-    public static boolean verifySignature(byte[] message, byte[] signature, AsymmetricKeyParameter publicKey) {
+    /**
+     * Verify if passed message is compatible with signature using signer public key
+     *
+     * @param unblindedSignature
+     * 		UnblindedSignature
+     * @param publicKey
+     * 		singer RSA public key
+     *
+     * @return true if verification correct, false otherwise
+     */
+    public static boolean verifySignature(RSAUnblindedSignature unblindedSignature, AsymmetricKeyParameter publicKey) {
         PSSSigner signer = new PSSSigner(new RSAEngine(), new SHA1Digest(), 20);
         signer.init(false, publicKey);
-        signer.update(message, 0, message.length);
+        signer.update(unblindedSignature.originalMessage, 0, unblindedSignature.originalMessage.length);
 
-        return signer.verifySignature(signature);
+        return signer.verifySignature(unblindedSignature.content);
     }
 
-    private static byte[] stringToBytes(@NotNull String message) {
+    private static byte[] stringToBytes(@NotNull String text) {
         try {
-            return message.getBytes(ENCODING_UTF8);
+            return text.getBytes(ENCODING_UTF8);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("Could not find encoding: " + ENCODING_UTF8, e);
+        }
+    }
+
+    private static String bytesToString(@NotNull byte[] text) {
+        try {
+            return new String(text, ENCODING_UTF8);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Could not find encoding: " + ENCODING_UTF8, e);
+        }
+    }
+
+    public static class RSABlindedMessage implements Serializable {
+        private static final long serialVersionUID = 4669890053466414694L;
+
+        private byte[] content;
+
+        public byte[] getContent() {
+            return content;
+        }
+
+        public void setContent(byte[] content) {
+            this.content = content;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+
+            if (!(o instanceof RSABlindedMessage)) return false;
+
+            RSABlindedMessage that = (RSABlindedMessage) o;
+
+            return new EqualsBuilder()
+                .append(content, that.content)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder(17, 37)
+                .append(content)
+                .toHashCode();
+        }
+    }
+
+    public static class RSABlindedSignature implements Serializable {
+
+        private static final long serialVersionUID = -3184098262998759568L;
+
+        byte[] content;
+
+        public byte[] getContent() {
+            return content;
+        }
+
+        public void setContent(byte[] content) {
+            this.content = content;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+
+            if (!(o instanceof RSABlindedSignature)) return false;
+
+            RSABlindedSignature that = (RSABlindedSignature) o;
+
+            return new EqualsBuilder()
+                .append(content, that.content)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder(17, 37)
+                .append(content)
+                .toHashCode();
+        }
+    }
+
+    public static class RSAUnblindedSignature implements Serializable {
+        private static final long serialVersionUID = 6336896071726519590L;
+
+        private byte[] content;
+        private byte[] originalMessage;
+
+        public byte[] getContent() {
+            return content;
+        }
+
+        public void setContent(byte[] content) {
+            this.content = content;
+        }
+
+        public String getOriginalMessage() {
+            return bytesToString(originalMessage);
+        }
+
+        public void setOriginalMessage(String originalMessage) {
+            this.originalMessage = stringToBytes(originalMessage);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+
+            if (!(o instanceof RSAUnblindedSignature)) return false;
+
+            RSAUnblindedSignature that = (RSAUnblindedSignature) o;
+
+            return new EqualsBuilder()
+                .append(content, that.content)
+                .append(originalMessage, that.originalMessage)
+                .isEquals();
+        }
+
+        @Override
+        public int hashCode() {
+            return new HashCodeBuilder(17, 37)
+                .append(content)
+                .append(originalMessage)
+                .toHashCode();
         }
     }
 }

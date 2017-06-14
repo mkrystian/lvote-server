@@ -1,14 +1,14 @@
 package lvote.mprezes.student.agh.edu.pl.security;
 
+import lvote.mprezes.student.agh.edu.pl.security.RSABlindSignaturesUtils.*;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.params.RSABlindingParameters;
-import org.bouncycastle.crypto.params.RSAKeyParameters;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.UnsupportedEncodingException;
 
+import static lvote.mprezes.student.agh.edu.pl.security.RSABlindSignaturesUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -19,12 +19,16 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class RSABlindSignaturesUtilsUnitTest {
 
-    private static final String ENCODING_UTF8 = "UTF8";
+    private static final String MESSAGE = "some text to be sent";
+    private final AsymmetricCipherKeyPair signerKeyPair = generateKeyPair();
+    private final RSABlindingParameters rsaBlindingParameters = generateRSABlindingParameters(signerKeyPair.getPublic());
+    private final RSABlindingParameters rsaBlindingParameters2 = generateRSABlindingParameters(signerKeyPair.getPublic());
+    private final AsymmetricCipherKeyPair signerKeyPair2 = generateKeyPair();
 
     @Test
     public void testGenerateKeyPair() {
-        AsymmetricCipherKeyPair keyPair1 = RSABlindSignaturesUtils.generateKeyPair();
-        AsymmetricCipherKeyPair keyPair2 = RSABlindSignaturesUtils.generateKeyPair();
+        AsymmetricCipherKeyPair keyPair1 = generateKeyPair();
+        AsymmetricCipherKeyPair keyPair2 = generateKeyPair();
 
         assertThat(keyPair1).isNotNull();
         assertThat(keyPair1.getPublic()).isNotNull();
@@ -36,46 +40,106 @@ public class RSABlindSignaturesUtilsUnitTest {
     }
 
     @Test
+    public void testGenerateRSABlindingParameters() {
+        RSABlindingParameters rsaBlindingParameters = generateRSABlindingParameters(signerKeyPair.getPublic());
+        RSABlindingParameters rsaBlindingParameters2 = generateRSABlindingParameters(signerKeyPair2.getPublic());
+
+        assertThat(rsaBlindingParameters).isNotNull().isNotEqualTo(rsaBlindingParameters2);
+    }
+
+    @Test
     public void testBlindMessage() throws CryptoException, UnsupportedEncodingException {
-        /*AsymmetricCipherKeyPair keyPair = RSABlindSignaturesUtils.generateKeyPair();
-        String message = "some message";
+        RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
+        RSABlindedMessage rsaBlindedMessage2 = blindMessage(MESSAGE, rsaBlindingParameters2);
+        RSABlindedMessage rsaBlindedMessage3 = blindMessage("other text", rsaBlindingParameters2);
 
-        byte[] blindedMessage = RSABlindSignaturesUtils.blindMessage(message, );
+        assertThat(rsaBlindedMessage).isNotNull().isNotEqualTo(rsaBlindedMessage2).isNotEqualTo(rsaBlindedMessage3);
+        assertThat(rsaBlindedMessage2).isNotNull().isNotEqualTo(rsaBlindedMessage3);
+        assertThat(rsaBlindedMessage3).isNotNull();
 
-        assertThat(blindedMessage).isNotNull().isNotEmpty().isNotEqualTo(message.getBytes(ENCODING_UTF8));*/
     }
 
     @Test
     public void testSignMessage() throws UnsupportedEncodingException {
-        AsymmetricCipherKeyPair keyPair = RSABlindSignaturesUtils.generateKeyPair();
-        byte[] message = "some message".getBytes(ENCODING_UTF8);
+        RSABlindedMessage rsaBlindedMessage = new RSABlindedMessage();
+        rsaBlindedMessage.setContent(MESSAGE.getBytes());
+        RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
 
-        byte[] signature = RSABlindSignaturesUtils.signMessage(message, (RSAKeyParameters) keyPair.getPrivate());
-
-        assertThat(signature).isNotNull().isNotEmpty().isNotEqualTo(message);
+        assertThat(rsaBlindedSignature).isNotNull();
     }
 
     @Test
-    @Ignore
     public void testVerifySignature() throws UnsupportedEncodingException {
-        AsymmetricCipherKeyPair keyPair = RSABlindSignaturesUtils.generateKeyPair();
-        byte[] message = "some message".getBytes(ENCODING_UTF8);
-        byte[] signature = RSABlindSignaturesUtils.signMessage(message, (RSAKeyParameters) keyPair.getPrivate());
+        RSAUnblindedSignature rsaUnblindedSignature = new RSAUnblindedSignature();
+        rsaUnblindedSignature.setContent(MESSAGE.getBytes());
+        rsaUnblindedSignature.setOriginalMessage(MESSAGE);
 
-        assertThat(RSABlindSignaturesUtils.verifySignature(message, signature, keyPair.getPublic())).isTrue();
+        assertThat(verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic())).isFalse();
     }
 
     @Test
-    public void testFullPath() throws CryptoException, UnsupportedEncodingException {
-        String someMessage = "some text";
-        AsymmetricCipherKeyPair signerKeyPair = RSABlindSignaturesUtils.generateKeyPair();
-        RSABlindingParameters rsaBlindingParameters = RSABlindSignaturesUtils.generateRSABlindingParameters((RSAKeyParameters) signerKeyPair.getPublic());
+    public void testUnblindUnblindSignature() {
+        RSABlindedSignature rsaBlindedMessage = new RSABlindedSignature();
+        rsaBlindedMessage.setContent(MESSAGE.getBytes());
 
-        byte[] blindedMessage = RSABlindSignaturesUtils.blindMessage(someMessage, rsaBlindingParameters);
-        byte[] signature = RSABlindSignaturesUtils.signMessage(blindedMessage, (RSAKeyParameters) signerKeyPair.getPrivate());
-        byte[] unblindedMessage = RSABlindSignaturesUtils.unblindMessage(signature, rsaBlindingParameters);
-        assertThat(RSABlindSignaturesUtils.verifySignature(someMessage.getBytes(ENCODING_UTF8), unblindedMessage, signerKeyPair.getPublic())).isTrue();
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedMessage, MESSAGE, rsaBlindingParameters);
 
-
+        assertThat(rsaUnblindedSignature).isNotNull();
     }
+
+    @Test
+    public void testFullPathCorrect() throws CryptoException, UnsupportedEncodingException {
+
+        RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
+        RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void testFullPathFailsIncorrectMessage() throws CryptoException {
+
+        RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
+        RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, "other message", rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void testFullPathFailsIncorrectBlindingParameters() throws CryptoException, UnsupportedEncodingException {
+
+        RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
+        RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, generateRSABlindingParameters(signerKeyPair.getPublic()));
+        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void testFullPathFailsIncorrectPrivateKey() throws CryptoException {
+
+        RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
+        RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, generateKeyPair().getPrivate());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void testFullPathFailIncorrectPublicKey() throws CryptoException, UnsupportedEncodingException {
+
+        RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
+        RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair2.getPublic());
+
+        assertThat(result).isFalse();
+    }
+
 }
