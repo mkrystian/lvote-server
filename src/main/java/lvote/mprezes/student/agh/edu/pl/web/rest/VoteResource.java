@@ -12,12 +12,14 @@ import lvote.mprezes.student.agh.edu.pl.web.rest.util.HeaderUtil;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -135,14 +137,21 @@ public class VoteResource {
 
     @PutMapping("vote/sign")
     @Timed
-    public ResponseEntity<SignedVote> signVote(@RequestBody BlindedVote blindedVote) {
+    public ResponseEntity signVote(@RequestBody BlindedVote blindedVote) {
         log.debug("REST request to sign Vote for Voting id : {}", blindedVote.getVotingId());
+        if (!validInputSignVote(blindedVote.getVotingId())) {
+            return new ResponseEntity<>("User could not vote in this voting", HttpStatus.FORBIDDEN);
+        }
         SignedVote result = new SignedVote();
         result.setBlindedSignature(RSABlindSignaturesUtils.signMessage(blindedVote.getBlindedMessage(), PublicKeyResource.keyPair.getPrivate()));
 
         votingResource.setUserAlreadyVoted(blindedVote.getVotingId());
 
         return ResponseEntity.ok(result);
+    }
+
+    private boolean validInputSignVote(Long votingId) {
+        return votingResource.getAllVotingsAvailableForUser().stream().anyMatch(voting -> Objects.equals(voting.getId(), votingId));
     }
 
     @PostMapping("vote/unblinded")
