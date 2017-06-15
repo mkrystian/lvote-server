@@ -155,12 +155,22 @@ public class VotingResource {
         return votingRepository.findAllByUserGroupContainingCurrentUser();
     }
 
-    public void setUserAlreadyVoted(Long votingId) {
+    /**
+     * Adds current user to list of already voted for given voting id
+     *
+     * @param votingId
+     * 		Long representation of votingId as link to voting
+     */
+    void setUserAlreadyVoted(Long votingId) {
         Voting voting = votingRepository.findOneWithEagerRelationships(votingId);
         User currentUser = userService.getUserWithAuthorities();
         currentUser.setLogin(SecurityUtils.getCurrentUserLogin());
         voting.getAlreadyVoteds().add(currentUser);
 
         votingRepository.save(voting);
+    }
+
+    Optional<Voting> getOngoingVote(Long voteId) {
+        return Optional.ofNullable(votingRepository.findByStartDateAfterAndEndDateBeforeAndIdEquals(voteId));
     }
 }

@@ -156,16 +156,17 @@ public class VoteResource {
 
     @PostMapping("vote/unblinded")
     @Timed
-    public ResponseEntity<Boolean> putVoteSigned(@RequestBody UnblindedVote unblindedVote) {
+    public ResponseEntity<Boolean> addVoteSigned(@RequestBody UnblindedVote unblindedVote) {
         log.debug("REST request to add signed vote, Voting id : {}, Answer id : {}, Random number : {}", unblindedVote.getVotingId(), unblindedVote.getAnswerId(), unblindedVote.getRandomNumber());
 
-        if (signatureValidation(unblindedVote) && checkIfNotExists(unblindedVote)) {
+
+        if (signatureValidation(unblindedVote) && checkIfNotExists(unblindedVote) && votingDatesValidation(unblindedVote.getVotingId())) {
             log.debug("Vote verification OK.");
             addVote(unblindedVote);
             return ResponseEntity.ok(true);
         } else {
             log.debug("Vote verification failed - vote nod added!");
-            return ResponseEntity.ok(false);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
         }
     }
 
@@ -178,15 +179,30 @@ public class VoteResource {
         voteRepository.save(vote);
     }
 
-    private boolean checkIfNotExists(@RequestBody UnblindedVote unblindedVote) {
+    private boolean votingDatesValidation(Long votingId) {
+        boolean present = votingResource.getOngoingVote(votingId).isPresent();
+        if (present) {
+            log.error("This voting is not ongoing");
+        }
+        return present;
+    }
 
-        return voteRepository.findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber().toString()).isEmpty();
+    private boolean checkIfNotExists(@RequestBody UnblindedVote unblindedVote) {
+        boolean notExits = voteRepository.findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber().toString()).isEmpty();
+        if (!notExits) {
+            log.error("This vote already exists and could not be added twice");
+        }
+        return notExits;
     }
 
 
     private boolean signatureValidation(UnblindedVote unblindedVote) {
         String originalMessage = unblindedVote.getStringRepresentation();
-        return RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, PublicKeyResource.keyPair.getPublic());
+        boolean validationResult = RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, PublicKeyResource.keyPair.getPublic());
+        if (!validationResult) {
+            log.error("Signature validation failed");
+        }
+        return validationResult;
     }
 
 }
