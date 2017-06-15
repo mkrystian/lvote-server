@@ -2,8 +2,11 @@ package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import lvote.mprezes.student.agh.edu.pl.domain.User;
 import lvote.mprezes.student.agh.edu.pl.domain.Voting;
 import lvote.mprezes.student.agh.edu.pl.repository.VotingRepository;
+import lvote.mprezes.student.agh.edu.pl.security.SecurityUtils;
+import lvote.mprezes.student.agh.edu.pl.service.UserService;
 import lvote.mprezes.student.agh.edu.pl.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,17 +31,22 @@ public class VotingResource {
     private static final String ENTITY_NAME = "voting";
 
     private final VotingRepository votingRepository;
+    private final UserService userService;
 
-    public VotingResource(VotingRepository votingRepository) {
+    public VotingResource(VotingRepository votingRepository, UserService userService) {
         this.votingRepository = votingRepository;
+        this.userService = userService;
     }
 
     /**
      * POST  /votings : Create a new voting.
      *
-     * @param voting the voting to create
+     * @param voting
+     * 		the voting to create
+     *
      * @return the ResponseEntity with status 201 (Created) and with body the new voting, or with status 400 (Bad Request) if the voting has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException
+     * 		if the Location URI syntax is incorrect
      */
     @PostMapping("/votings")
     @Timed
@@ -56,11 +64,14 @@ public class VotingResource {
     /**
      * PUT  /votings : Updates an existing voting.
      *
-     * @param voting the voting to update
+     * @param voting
+     * 		the voting to update
+     *
      * @return the ResponseEntity with status 200 (OK) and with body the updated voting,
      * or with status 400 (Bad Request) if the voting is not valid,
      * or with status 500 (Internal Server Error) if the voting couldnt be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException
+     * 		if the Location URI syntax is incorrect
      */
     @PutMapping("/votings")
     @Timed
@@ -91,7 +102,9 @@ public class VotingResource {
     /**
      * GET  /votings/:id : get the "id" voting.
      *
-     * @param id the id of the voting to retrieve
+     * @param id
+     * 		the id of the voting to retrieve
+     *
      * @return the ResponseEntity with status 200 (OK) and with body the voting, or with status 404 (Not Found)
      */
     @GetMapping("/votings/{id}")
@@ -105,7 +118,9 @@ public class VotingResource {
     /**
      * DELETE  /votings/:id : delete the "id" voting.
      *
-     * @param id the id of the voting to delete
+     * @param id
+     * 		the id of the voting to delete
+     *
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/votings/{id}")
@@ -140,4 +155,12 @@ public class VotingResource {
         return votingRepository.findAllByUserGroupContainingCurrentUser();
     }
 
+    public void setUserAlreadyVoted(Long votingId) {
+        Voting voting = votingRepository.findOneWithEagerRelationships(votingId);
+        User currentUser = userService.getUserWithAuthorities();
+        currentUser.setLogin(SecurityUtils.getCurrentUserLogin());
+        voting.getAlreadyVoteds().add(currentUser);
+
+        votingRepository.save(voting);
+    }
 }

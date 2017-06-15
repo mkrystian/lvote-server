@@ -26,4 +26,7 @@ public interface VotingRepository extends JpaRepository<Voting, Long> {
         "join voting.alreadyVoteds av on av.login = ?#{principal.username} where mb.login = ?#{principal.username} and av.login is null ")
     List<Voting> findAllByUserGroupContainingCurrentUser();
 
+    @Query("update Voting voting set voting.alreadyVoteds = ?#{principal.username} where voting.id = :votingId")
+    void addUserToAlreadyVoted(@Param("votingId") Long votingId);
+
 }

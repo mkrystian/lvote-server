@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.math.BigInteger;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,8 +41,8 @@ public class VoteResourceIntTest {
     private static final Long DEFAULT_ANSWER_ID = 1L;
     private static final Long UPDATED_ANSWER_ID = 2L;
 
-    private static final BigInteger DEFAULT_RANDOM_NUMBER = new BigInteger("1");
-    private static final BigInteger UPDATED_RANDOM_NUMBER = new BigInteger("2");
+    private static final String DEFAULT_RANDOM_NUMBER = "1";
+    private static final String UPDATED_RANDOM_NUMBER = "2";
 
     @Autowired
     private VoteRepository voteRepository;
@@ -58,6 +57,9 @@ public class VoteResourceIntTest {
     private ExceptionTranslator exceptionTranslator;
 
     @Autowired
+    private VotingResource votingResource;
+
+    @Autowired
     private EntityManager em;
 
     private MockMvc restVoteMockMvc;
@@ -67,7 +69,7 @@ public class VoteResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        VoteResource voteResource = new VoteResource(voteRepository);
+        VoteResource voteResource = new VoteResource(voteRepository, votingResource);
         this.restVoteMockMvc = MockMvcBuilders.standaloneSetup(voteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -145,7 +147,7 @@ public class VoteResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(vote.getId().intValue())))
             .andExpect(jsonPath("$.[*].votingId").value(hasItem(DEFAULT_VOTING_ID.intValue())))
             .andExpect(jsonPath("$.[*].answerId").value(hasItem(DEFAULT_ANSWER_ID.intValue())))
-            .andExpect(jsonPath("$.[*].randomNumber").value(hasItem(DEFAULT_RANDOM_NUMBER.intValue())));
+            .andExpect(jsonPath("$.[*].randomNumber").value(hasItem(DEFAULT_RANDOM_NUMBER)));
     }
 
     @Test
@@ -161,7 +163,7 @@ public class VoteResourceIntTest {
             .andExpect(jsonPath("$.id").value(vote.getId().intValue()))
             .andExpect(jsonPath("$.votingId").value(DEFAULT_VOTING_ID.intValue()))
             .andExpect(jsonPath("$.answerId").value(DEFAULT_ANSWER_ID.intValue()))
-            .andExpect(jsonPath("$.randomNumber").value(DEFAULT_RANDOM_NUMBER.intValue()));
+            .andExpect(jsonPath("$.randomNumber").value(DEFAULT_RANDOM_NUMBER));
     }
 
     @Test

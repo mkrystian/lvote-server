@@ -33,9 +33,11 @@ public class VoteResource {
 
     private static final String ENTITY_NAME = "vote";
     private final VoteRepository voteRepository;
+    private final VotingResource votingResource;
 
-    public VoteResource(VoteRepository voteRepository) {
+    public VoteResource(VoteRepository voteRepository, VotingResource votingResource) {
         this.voteRepository = voteRepository;
+        this.votingResource = votingResource;
     }
 
     /**
@@ -138,6 +140,8 @@ public class VoteResource {
         SignedVote result = new SignedVote();
         result.setBlindedSignature(RSABlindSignaturesUtils.signMessage(blindedVote.getBlindedMessage(), PublicKeyResource.keyPair.getPrivate()));
 
+        votingResource.setUserAlreadyVoted(blindedVote.getVotingId());
+
         return ResponseEntity.ok(result);
     }
 
@@ -160,14 +164,14 @@ public class VoteResource {
         Vote vote = new Vote()
             .answerId(unblindedVote.getAnswerId())
             .votingId(unblindedVote.getVotingId())
-            .randomNumber(unblindedVote.getRandomNumber());
+            .randomNumber(unblindedVote.getRandomNumber().toString());
 
         voteRepository.save(vote);
     }
 
     private boolean checkIfNotExists(@RequestBody UnblindedVote unblindedVote) {
 
-        return voteRepository.findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber()).isEmpty();
+        return voteRepository.findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber().toString()).isEmpty();
     }
 
 

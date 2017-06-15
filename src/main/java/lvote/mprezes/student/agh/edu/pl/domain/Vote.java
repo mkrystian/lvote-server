@@ -5,7 +5,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.util.Objects;
 
 /**
@@ -29,7 +28,7 @@ public class Vote implements Serializable {
     private Long answerId;
 
     @Column(name = "random_number")
-    private BigInteger randomNumber;
+    private String randomNumber;
 
     public Long getId() {
         return id;
@@ -65,16 +64,16 @@ public class Vote implements Serializable {
         this.answerId = answerId;
     }
 
-    public BigInteger getRandomNumber() {
+    public String getRandomNumber() {
         return randomNumber;
     }
 
-    public Vote randomNumber(BigInteger randomNumber) {
+    public Vote randomNumber(String randomNumber) {
         this.randomNumber = randomNumber;
         return this;
     }
 
-    public void setRandomNumber(BigInteger randomNumber) {
+    public void setRandomNumber(String randomNumber) {
         this.randomNumber = randomNumber;
     }
 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class PublicKeyResource {
 
-    public final static AsymmetricCipherKeyPair keyPair = RSABlindSignaturesUtils.generateKeyPair();
+    static final AsymmetricCipherKeyPair keyPair = RSABlindSignaturesUtils.generateKeyPair();
 
     private final Logger log = LoggerFactory.getLogger(PublicKeyResource.class);
 
