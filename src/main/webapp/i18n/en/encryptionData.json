@@ -14,7 +14,9 @@
             },
             "detail": {
                 "title": "Encryption Data"
-            }
+            },
+            "privateKey": "Private Key",
+            "publicKey": "Public Key"
         }
     }
 }

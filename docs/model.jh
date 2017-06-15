@@ -27,7 +27,8 @@ entity Vote	{
 }
 
 entity EncryptionData	{
-
+	privateKey String,
+    publicKey String
 }
 
 relationship OneToMany {

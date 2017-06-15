@@ -1,11 +1,9 @@
 package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import lvote.mprezes.student.agh.edu.pl.LvoteApp;
-
 import lvote.mprezes.student.agh.edu.pl.domain.EncryptionData;
 import lvote.mprezes.student.agh.edu.pl.repository.EncryptionDataRepository;
 import lvote.mprezes.student.agh.edu.pl.web.rest.errors.ExceptionTranslator;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +34,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = LvoteApp.class)
 public class EncryptionDataResourceIntTest {
+
+    private static final String DEFAULT_PRIVATE_KEY = "AAAAAAAAAA";
+    private static final String UPDATED_PRIVATE_KEY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PUBLIC_KEY = "AAAAAAAAAA";
+    private static final String UPDATED_PUBLIC_KEY = "BBBBBBBBBB";
 
     @Autowired
     private EncryptionDataRepository encryptionDataRepository;
@@ -73,7 +77,9 @@ public class EncryptionDataResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static EncryptionData createEntity(EntityManager em) {
-        EncryptionData encryptionData = new EncryptionData();
+        EncryptionData encryptionData = new EncryptionData()
+            .privateKey(DEFAULT_PRIVATE_KEY)
+            .publicKey(DEFAULT_PUBLIC_KEY);
         return encryptionData;
     }
 
@@ -97,6 +103,8 @@ public class EncryptionDataResourceIntTest {
         List<EncryptionData> encryptionDataList = encryptionDataRepository.findAll();
         assertThat(encryptionDataList).hasSize(databaseSizeBeforeCreate + 1);
         EncryptionData testEncryptionData = encryptionDataList.get(encryptionDataList.size() - 1);
+        assertThat(testEncryptionData.getPrivateKey()).isEqualTo(DEFAULT_PRIVATE_KEY);
+        assertThat(testEncryptionData.getPublicKey()).isEqualTo(DEFAULT_PUBLIC_KEY);
     }
 
     @Test
@@ -128,7 +136,9 @@ public class EncryptionDataResourceIntTest {
         restEncryptionDataMockMvc.perform(get("/api/encryption-data?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(encryptionData.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(encryptionData.getId().intValue())))
+            .andExpect(jsonPath("$.[*].privateKey").value(hasItem(DEFAULT_PRIVATE_KEY.toString())))
+            .andExpect(jsonPath("$.[*].publicKey").value(hasItem(DEFAULT_PUBLIC_KEY.toString())));
     }
 
     @Test
@@ -141,7 +151,9 @@ public class EncryptionDataResourceIntTest {
         restEncryptionDataMockMvc.perform(get("/api/encryption-data/{id}", encryptionData.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(encryptionData.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(encryptionData.getId().intValue()))
+            .andExpect(jsonPath("$.privateKey").value(DEFAULT_PRIVATE_KEY.toString()))
+            .andExpect(jsonPath("$.publicKey").value(DEFAULT_PUBLIC_KEY.toString()));
     }
 
     @Test
@@ -161,6 +173,9 @@ public class EncryptionDataResourceIntTest {
 
         // Update the encryptionData
         EncryptionData updatedEncryptionData = encryptionDataRepository.findOne(encryptionData.getId());
+        updatedEncryptionData
+            .privateKey(UPDATED_PRIVATE_KEY)
+            .publicKey(UPDATED_PUBLIC_KEY);
 
         restEncryptionDataMockMvc.perform(put("/api/encryption-data")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -171,6 +186,8 @@ public class EncryptionDataResourceIntTest {
         List<EncryptionData> encryptionDataList = encryptionDataRepository.findAll();
         assertThat(encryptionDataList).hasSize(databaseSizeBeforeUpdate);
         EncryptionData testEncryptionData = encryptionDataList.get(encryptionDataList.size() - 1);
+        assertThat(testEncryptionData.getPrivateKey()).isEqualTo(UPDATED_PRIVATE_KEY);
+        assertThat(testEncryptionData.getPublicKey()).isEqualTo(UPDATED_PUBLIC_KEY);
     }
 
     @Test

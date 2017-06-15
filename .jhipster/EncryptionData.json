@@ -1,7 +1,16 @@
 {
     "fluentMethods": true,
     "relationships": [],
-    "fields": [],
+    "fields": [
+        {
+            "fieldName": "privateKey",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "publicKey",
+            "fieldType": "String"
+        }
+    ],
     "changelogDate": "20170523185500",
     "entityTableName": "encryption_data",
     "dto": "no",

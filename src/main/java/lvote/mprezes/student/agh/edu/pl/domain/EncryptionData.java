@@ -21,12 +21,44 @@ public class EncryptionData implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "private_key")
+    private String privateKey;
+
+    @Column(name = "public_key")
+    private String publicKey;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public EncryptionData privateKey(String privateKey) {
+        this.privateKey = privateKey;
+        return this;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public EncryptionData publicKey(String publicKey) {
+        this.publicKey = publicKey;
+        return this;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 
     @Override
@@ -53,6 +85,8 @@ public class EncryptionData implements Serializable {
     public String toString() {
         return "EncryptionData{" +
             "id=" + getId() +
+            ", privateKey='" + getPrivateKey() + "'" +
+            ", publicKey='" + getPublicKey() + "'" +
             "}";
     }
 }

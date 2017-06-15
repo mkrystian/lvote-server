@@ -104,6 +104,8 @@
                     resolve: {
                         entity: function () {
                             return {
+                                privateKey: null,
+                                publicKey: null,
                                 id: null
                             };
                         }
