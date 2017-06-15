@@ -2,9 +2,14 @@ package lvote.mprezes.student.agh.edu.pl.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import io.github.jhipster.web.util.ResponseUtil;
+import lvote.mprezes.student.agh.edu.pl.domain.BlindedVote;
+import lvote.mprezes.student.agh.edu.pl.domain.SignedVote;
+import lvote.mprezes.student.agh.edu.pl.domain.UnblindedVote;
 import lvote.mprezes.student.agh.edu.pl.domain.Vote;
 import lvote.mprezes.student.agh.edu.pl.repository.VoteRepository;
+import lvote.mprezes.student.agh.edu.pl.security.RSABlindSignaturesUtils;
 import lvote.mprezes.student.agh.edu.pl.web.rest.util.HeaderUtil;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +27,11 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class VoteResource {
 
+    private final static AsymmetricCipherKeyPair keyPair = RSABlindSignaturesUtils.generateKeyPair();
+
     private final Logger log = LoggerFactory.getLogger(VoteResource.class);
 
     private static final String ENTITY_NAME = "vote";
-
     private final VoteRepository voteRepository;
 
     public VoteResource(VoteRepository voteRepository) {
@@ -35,9 +41,12 @@ public class VoteResource {
     /**
      * POST  /votes : Create a new vote.
      *
-     * @param vote the vote to create
+     * @param vote
+     * 		the vote to create
+     *
      * @return the ResponseEntity with status 201 (Created) and with body the new vote, or with status 400 (Bad Request) if the vote has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException
+     * 		if the Location URI syntax is incorrect
      */
     @PostMapping("/votes")
     @Timed
@@ -55,11 +64,14 @@ public class VoteResource {
     /**
      * PUT  /votes : Updates an existing vote.
      *
-     * @param vote the vote to update
+     * @param vote
+     * 		the vote to update
+     *
      * @return the ResponseEntity with status 200 (OK) and with body the updated vote,
      * or with status 400 (Bad Request) if the vote is not valid,
      * or with status 500 (Internal Server Error) if the vote couldnt be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException
+     * 		if the Location URI syntax is incorrect
      */
     @PutMapping("/votes")
     @Timed
@@ -90,7 +102,9 @@ public class VoteResource {
     /**
      * GET  /votes/:id : get the "id" vote.
      *
-     * @param id the id of the vote to retrieve
+     * @param id
+     * 		the id of the vote to retrieve
+     *
      * @return the ResponseEntity with status 200 (OK) and with body the vote, or with status 404 (Not Found)
      */
     @GetMapping("/votes/{id}")
@@ -104,7 +118,9 @@ public class VoteResource {
     /**
      * DELETE  /votes/:id : delete the "id" vote.
      *
-     * @param id the id of the vote to delete
+     * @param id
+     * 		the id of the vote to delete
+     *
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/votes/{id}")
@@ -113,6 +129,28 @@ public class VoteResource {
         log.debug("REST request to delete Vote : {}", id);
         voteRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    @PutMapping("vote/sign")
+    @Timed
+    public ResponseEntity<SignedVote> signVote(@RequestBody BlindedVote blindedVote) {
+        log.debug("REST request to sign Vote for Voting id : {}", blindedVote.getVotingId());
+        SignedVote result = new SignedVote();
+        result.setBlindedSignature(RSABlindSignaturesUtils.signMessage(blindedVote.getBlindedMessage(), keyPair.getPrivate()));
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("vote/unblinded")
+    @Timed
+    public ResponseEntity<Boolean> putVoteSigned(@RequestBody UnblindedVote unblindedVote) {
+        log.debug("REST request to add signed vote, Voting id : {}, Answer id : {}", unblindedVote.getVotingId(), unblindedVote.getAnswerId());
+        String originalMessage = unblindedVote.getAnswerId().toString();
+
+        boolean result = RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, keyPair.getPublic());
+
+        return ResponseEntity.ok(result);
+
     }
 
 }
