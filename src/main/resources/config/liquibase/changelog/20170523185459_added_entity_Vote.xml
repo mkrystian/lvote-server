@@ -28,7 +28,7 @@
                 <constraints nullable="true"/>
             </column>
 
-            <column name="random_number" type="bigint">
+            <column name="random_number" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
 

@@ -144,13 +144,36 @@ public class VoteResource {
     @PostMapping("vote/unblinded")
     @Timed
     public ResponseEntity<Boolean> putVoteSigned(@RequestBody UnblindedVote unblindedVote) {
-        log.debug("REST request to add signed vote, Voting id : {}, Answer id : {}", unblindedVote.getVotingId(), unblindedVote.getAnswerId());
-        String originalMessage = unblindedVote.getAnswerId().toString();
+        log.debug("REST request to add signed vote, Voting id : {}, Answer id : {}, Random number : {}", unblindedVote.getVotingId(), unblindedVote.getAnswerId(), unblindedVote.getRandomNumber());
 
-        boolean result = RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, PublicKeyResource.keyPair.getPublic());
+        if (signatureValidation(unblindedVote) && checkIfNotExists(unblindedVote)) {
+            log.debug("Vote verification OK.");
+            addVote(unblindedVote);
+            return ResponseEntity.ok(true);
+        } else {
+            log.debug("Vote verification failed - vote nod added!");
+            return ResponseEntity.ok(false);
+        }
+    }
 
-        return ResponseEntity.ok(result);
+    private void addVote(UnblindedVote unblindedVote) {
+        Vote vote = new Vote()
+            .answerId(unblindedVote.getAnswerId())
+            .votingId(unblindedVote.getVotingId())
+            .randomNumber(unblindedVote.getRandomNumber());
 
+        voteRepository.save(vote);
+    }
+
+    private boolean checkIfNotExists(@RequestBody UnblindedVote unblindedVote) {
+
+        return voteRepository.findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber()).isEmpty();
+    }
+
+
+    private boolean signatureValidation(UnblindedVote unblindedVote) {
+        String originalMessage = unblindedVote.getStringRepresentation();
+        return RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, PublicKeyResource.keyPair.getPublic());
     }
 
 }

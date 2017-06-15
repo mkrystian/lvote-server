@@ -1,10 +1,9 @@
 package lvote.mprezes.student.agh.edu.pl.config;
 
-import lvote.mprezes.student.agh.edu.pl.security.*;
-import lvote.mprezes.student.agh.edu.pl.security.jwt.*;
-
-import io.github.jhipster.security.*;
-
+import io.github.jhipster.security.Http401UnauthorizedEntryPoint;
+import lvote.mprezes.student.agh.edu.pl.security.AuthoritiesConstants;
+import lvote.mprezes.student.agh.edu.pl.security.jwt.JWTConfigurer;
+import lvote.mprezes.student.agh.edu.pl.security.jwt.TokenProvider;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -104,6 +103,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset_password/init").permitAll()
             .antMatchers("/api/account/reset_password/finish").permitAll()
             .antMatchers("/api/profile-info").permitAll()
+            .antMatchers("/api/key/public").permitAll()
+            .antMatchers("/api/vote/unblinded").permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)

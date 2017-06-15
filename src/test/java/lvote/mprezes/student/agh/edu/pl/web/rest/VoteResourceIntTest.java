@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigInteger;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,8 +42,8 @@ public class VoteResourceIntTest {
     private static final Long DEFAULT_ANSWER_ID = 1L;
     private static final Long UPDATED_ANSWER_ID = 2L;
 
-    private static final Long DEFAULT_RANDOM_NUMBER = 1L;
-    private static final Long UPDATED_RANDOM_NUMBER = 2L;
+    private static final BigInteger DEFAULT_RANDOM_NUMBER = new BigInteger("1");
+    private static final BigInteger UPDATED_RANDOM_NUMBER = new BigInteger("2");
 
     @Autowired
     private VoteRepository voteRepository;
