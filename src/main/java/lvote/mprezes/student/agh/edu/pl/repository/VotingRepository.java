@@ -23,7 +23,7 @@ public interface VotingRepository extends JpaRepository<Voting, Long> {
     Voting findOneWithEagerRelationships(@Param("id") Long id);
 
     @Query("select distinct voting from Voting voting left join fetch voting.content vc left join fetch vc.answers join fetch voting.userGroup ug join fetch ug.members mb left " +
-        "join voting.alreadyVoteds av on av.login = ?#{principal.username} where mb.login = ?#{principal.username} and av.login is null ")
+        "join voting.alreadyVoteds av on av.login = ?#{principal.username} where mb.login = ?#{principal.username} and av.login is null and voting.startDate <= current_date and voting.endDate >= current_date ")
     List<Voting> findAllByUserGroupContainingCurrentUser();
 
     @Query("update Voting voting set voting.alreadyVoteds = ?#{principal.username} where voting.id = :votingId")
