@@ -25,14 +25,14 @@ public class JSonConverterImplUnitTest {
     public void testConvertToString() throws Exception {
         String json = converter.convert(createTestData());
 
-        Assert.assertEquals(json, EXPECTED_JSON);
+        Assert.assertEquals(EXPECTED_JSON, json);
     }
 
     @Test
     public void testConvertToObject() throws Exception {
         SomeClassForTest object = converter.convert(EXPECTED_JSON);
 
-        Assert.assertEquals(object, createTestData());
+        Assert.assertEquals(createTestData(), object);
     }
 
     private SomeClassForTest createTestData() {
