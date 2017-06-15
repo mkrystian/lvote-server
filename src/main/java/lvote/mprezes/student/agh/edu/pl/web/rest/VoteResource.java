@@ -136,7 +136,7 @@ public class VoteResource {
     public ResponseEntity<SignedVote> signVote(@RequestBody BlindedVote blindedVote) {
         log.debug("REST request to sign Vote for Voting id : {}", blindedVote.getVotingId());
         SignedVote result = new SignedVote();
-        result.setBlindedSignature(RSABlindSignaturesUtils.signMessage(blindedVote.getBlindedMessage(), keyPair.getPrivate()));
+        result.setBlindedSignature(RSABlindSignaturesUtils.signMessage(blindedVote.getBlindedMessage(), PublicKeyResource.keyPair.getPrivate()));
 
         return ResponseEntity.ok(result);
     }
@@ -147,7 +147,7 @@ public class VoteResource {
         log.debug("REST request to add signed vote, Voting id : {}, Answer id : {}", unblindedVote.getVotingId(), unblindedVote.getAnswerId());
         String originalMessage = unblindedVote.getAnswerId().toString();
 
-        boolean result = RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, keyPair.getPublic());
+        boolean result = RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, PublicKeyResource.keyPair.getPublic());
 
         return ResponseEntity.ok(result);
 
