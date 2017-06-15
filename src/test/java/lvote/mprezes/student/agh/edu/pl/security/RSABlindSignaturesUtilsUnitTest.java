@@ -72,9 +72,8 @@ public class RSABlindSignaturesUtilsUnitTest {
     public void testVerifySignature() throws UnsupportedEncodingException {
         RSAUnblindedSignature rsaUnblindedSignature = new RSAUnblindedSignature();
         rsaUnblindedSignature.setContent(MESSAGE.getBytes());
-        rsaUnblindedSignature.setOriginalMessage(MESSAGE);
 
-        assertThat(verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic())).isFalse();
+        assertThat(verifySignature(rsaUnblindedSignature, MESSAGE, signerKeyPair.getPublic())).isFalse();
     }
 
     @Test
@@ -82,7 +81,7 @@ public class RSABlindSignaturesUtilsUnitTest {
         RSABlindedSignature rsaBlindedMessage = new RSABlindedSignature();
         rsaBlindedMessage.setContent(MESSAGE.getBytes());
 
-        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedMessage, MESSAGE, rsaBlindingParameters);
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedMessage, rsaBlindingParameters);
 
         assertThat(rsaUnblindedSignature).isNotNull();
     }
@@ -92,8 +91,8 @@ public class RSABlindSignaturesUtilsUnitTest {
 
         RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
         RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
-        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, rsaBlindingParameters);
-        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, MESSAGE, signerKeyPair.getPublic());
 
         assertThat(result).isTrue();
     }
@@ -103,8 +102,8 @@ public class RSABlindSignaturesUtilsUnitTest {
 
         RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
         RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
-        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, "other message", rsaBlindingParameters);
-        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, "other message", signerKeyPair.getPublic());
 
         assertThat(result).isFalse();
     }
@@ -114,8 +113,8 @@ public class RSABlindSignaturesUtilsUnitTest {
 
         RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
         RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
-        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, generateRSABlindingParameters(signerKeyPair.getPublic()));
-        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, generateRSABlindingParameters(signerKeyPair.getPublic()));
+        boolean result = verifySignature(rsaUnblindedSignature, MESSAGE, signerKeyPair.getPublic());
 
         assertThat(result).isFalse();
     }
@@ -125,8 +124,8 @@ public class RSABlindSignaturesUtilsUnitTest {
 
         RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
         RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, generateKeyPair().getPrivate());
-        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, rsaBlindingParameters);
-        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair.getPublic());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, MESSAGE, signerKeyPair.getPublic());
 
         assertThat(result).isFalse();
     }
@@ -136,8 +135,8 @@ public class RSABlindSignaturesUtilsUnitTest {
 
         RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
         RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, signerKeyPair.getPrivate());
-        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, MESSAGE, rsaBlindingParameters);
-        boolean result = verifySignature(rsaUnblindedSignature, signerKeyPair2.getPublic());
+        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, rsaBlindingParameters);
+        boolean result = verifySignature(rsaUnblindedSignature, MESSAGE, signerKeyPair2.getPublic());
 
         assertThat(result).isFalse();
     }
