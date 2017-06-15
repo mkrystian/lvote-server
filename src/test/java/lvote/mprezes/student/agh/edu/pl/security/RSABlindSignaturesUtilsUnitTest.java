@@ -120,17 +120,6 @@ public class RSABlindSignaturesUtilsUnitTest {
     }
 
     @Test
-    public void testFullPathFailsIncorrectPrivateKey() throws CryptoException {
-
-        RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
-        RSABlindedSignature rsaBlindedSignature = signMessage(rsaBlindedMessage, generateKeyPair().getPrivate());
-        RSAUnblindedSignature rsaUnblindedSignature = unblindSignature(rsaBlindedSignature, rsaBlindingParameters);
-        boolean result = verifySignature(rsaUnblindedSignature, MESSAGE, signerKeyPair.getPublic());
-
-        assertThat(result).isFalse();
-    }
-
-    @Test
     public void testFullPathFailIncorrectPublicKey() throws CryptoException, UnsupportedEncodingException {
 
         RSABlindedMessage rsaBlindedMessage = blindMessage(MESSAGE, rsaBlindingParameters);
