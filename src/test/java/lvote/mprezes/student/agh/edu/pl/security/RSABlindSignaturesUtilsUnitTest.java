@@ -78,7 +78,7 @@ public class RSABlindSignaturesUtilsUnitTest {
     }
 
     @Test
-    public void testUnblindUnblindSignature() {
+    public void testUnblindSignature() {
         RSABlindedSignature rsaBlindedMessage = new RSABlindedSignature();
         rsaBlindedMessage.setContent(MESSAGE.getBytes());
 
