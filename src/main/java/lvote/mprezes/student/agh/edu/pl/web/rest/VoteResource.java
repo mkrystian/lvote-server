@@ -174,7 +174,7 @@ public class VoteResource {
             return ResponseEntity.ok(true);
         } else {
             log.debug("Vote verification failed - vote nod added!");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(false);
+            return ResponseEntity.ok(false);
         }
     }
 
