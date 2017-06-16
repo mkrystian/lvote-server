@@ -161,7 +161,7 @@ public class VotingResource {
     @GetMapping("/results")
     @Timed
     public List<Voting> getResults() {
-        return votingRepository.findAllFinishedWIthRelationToVote();
+        return votingRepository.findAllWithRelationToVoteAvailableForUser();
     }
 
     /**
