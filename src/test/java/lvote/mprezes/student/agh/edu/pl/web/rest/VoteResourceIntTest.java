@@ -3,6 +3,7 @@ package lvote.mprezes.student.agh.edu.pl.web.rest;
 import lvote.mprezes.student.agh.edu.pl.LvoteApp;
 import lvote.mprezes.student.agh.edu.pl.domain.Vote;
 import lvote.mprezes.student.agh.edu.pl.repository.VoteRepository;
+import lvote.mprezes.student.agh.edu.pl.service.KeysService;
 import lvote.mprezes.student.agh.edu.pl.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +61,9 @@ public class VoteResourceIntTest {
     private VotingResource votingResource;
 
     @Autowired
+    private KeysService keysService;
+
+    @Autowired
     private EntityManager em;
 
     private MockMvc restVoteMockMvc;
@@ -69,7 +73,7 @@ public class VoteResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        VoteResource voteResource = new VoteResource(voteRepository, votingResource);
+        VoteResource voteResource = new VoteResource(voteRepository, votingResource, keysService);
         this.restVoteMockMvc = MockMvcBuilders.standaloneSetup(voteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

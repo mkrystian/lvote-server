@@ -8,6 +8,7 @@ import lvote.mprezes.student.agh.edu.pl.domain.UnblindedVote;
 import lvote.mprezes.student.agh.edu.pl.domain.Vote;
 import lvote.mprezes.student.agh.edu.pl.repository.VoteRepository;
 import lvote.mprezes.student.agh.edu.pl.security.RSABlindSignaturesUtils;
+import lvote.mprezes.student.agh.edu.pl.service.KeysService;
 import lvote.mprezes.student.agh.edu.pl.web.rest.util.HeaderUtil;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.slf4j.Logger;
@@ -21,6 +22,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static lvote.mprezes.student.agh.edu.pl.security.RSABlindSignaturesUtils.signMessage;
+import static lvote.mprezes.student.agh.edu.pl.security.RSABlindSignaturesUtils.verifySignature;
 
 /**
  * REST controller for managing Vote.
@@ -37,9 +41,12 @@ public class VoteResource {
     private final VoteRepository voteRepository;
     private final VotingResource votingResource;
 
-    public VoteResource(VoteRepository voteRepository, VotingResource votingResource) {
+    private final KeysService keysService;
+
+    public VoteResource(VoteRepository voteRepository, VotingResource votingResource, KeysService keysService) {
         this.voteRepository = voteRepository;
         this.votingResource = votingResource;
+        this.keysService = keysService;
     }
 
     /**
@@ -143,7 +150,8 @@ public class VoteResource {
             return new ResponseEntity<>("User could not vote in this voting", HttpStatus.FORBIDDEN);
         }
         SignedVote result = new SignedVote();
-        result.setBlindedSignature(RSABlindSignaturesUtils.signMessage(blindedVote.getBlindedMessage(), PublicKeyResource.keyPair.getPrivate()));
+        result
+            .setBlindedSignature(signMessage(blindedVote.getBlindedMessage(), keysService.getKeyByVotingId(blindedVote.getVotingId()).getPrivate()));
 
         votingResource.setUserAlreadyVoted(blindedVote.getVotingId());
 
@@ -188,7 +196,8 @@ public class VoteResource {
     }
 
     private boolean checkIfNotExists(@RequestBody UnblindedVote unblindedVote) {
-        boolean notExits = voteRepository.findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber().toString()).isEmpty();
+        boolean notExits = voteRepository
+            .findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber().toString()).isEmpty();
         if (!notExits) {
             log.error("This vote already exists and could not be added twice");
         }
@@ -198,7 +207,8 @@ public class VoteResource {
 
     private boolean signatureValidation(UnblindedVote unblindedVote) {
         String originalMessage = unblindedVote.getStringRepresentation();
-        boolean validationResult = RSABlindSignaturesUtils.verifySignature(unblindedVote.getSignature(), originalMessage, PublicKeyResource.keyPair.getPublic());
+        boolean validationResult =
+            verifySignature(unblindedVote.getSignature(), originalMessage, keysService.getKeyByVotingId(unblindedVote.getVotingId()).getPublic());
         if (!validationResult) {
             log.error("Signature validation failed");
         }
