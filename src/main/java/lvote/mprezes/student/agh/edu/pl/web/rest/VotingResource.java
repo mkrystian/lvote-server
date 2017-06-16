@@ -156,6 +156,15 @@ public class VotingResource {
     }
 
     /**
+     * GET results of finished votings available for user
+     */
+    @GetMapping("/results")
+    @Timed
+    public List<Voting> getResults() {
+        return votingRepository.findAllFinishedWIthRelationToVote();
+    }
+
+    /**
      * Adds current user to list of already voted for given voting id
      *
      * @param votingId

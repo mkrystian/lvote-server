@@ -181,7 +181,7 @@ public class VoteResource {
 
     private boolean votingDatesValidation(Long votingId) {
         boolean present = votingResource.getOngoingVote(votingId).isPresent();
-        if (present) {
+        if (!present) {
             log.error("This voting is not ongoing");
         }
         return present;

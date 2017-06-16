@@ -47,6 +47,12 @@ public class Voting implements Serializable {
     @ManyToOne
     private User owner;
 
+    @OneToMany()
+    @JoinColumn(name = "voting_id")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Vote> votes = new HashSet<>();
+
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "voting_already_voted",
@@ -192,6 +198,14 @@ public class Voting implements Serializable {
             return false;
         }
         return Objects.equals(getId(), voting.getId());
+    }
+
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = votes;
     }
 
     @Override
