@@ -29,6 +29,6 @@ public interface VotingRepository extends JpaRepository<Voting, Long> {
     @Query("select voting from Voting voting  where voting.id = :votingId and voting.startDate <= current_date and voting.endDate >= current_date ")
     Voting findByStartDateAfterAndEndDateBeforeAndIdEquals(@Param("votingId") Long votingId);
 
-    @Query("select distinct voting from Voting voting left join fetch voting.votes join voting.userGroup ug join ug.members mb  where voting.owner.login = ?#{principal.username} or mb.login = ?#{principal.username}")
+    @Query("select distinct voting from Voting voting left join fetch voting.content vc left join fetch vc.answers left join fetch voting.votes join voting.userGroup ug join ug.members mb  where voting.owner.login = ?#{principal.username} or mb.login = ?#{principal.username}")
     List<Voting> findAllWithRelationToVoteAvailableForUser();
 }

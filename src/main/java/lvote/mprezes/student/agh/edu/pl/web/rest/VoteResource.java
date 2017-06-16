@@ -182,7 +182,7 @@ public class VoteResource {
         Vote vote = new Vote()
             .answerId(unblindedVote.getAnswerId())
             .votingId(unblindedVote.getVotingId())
-            .randomNumber(unblindedVote.getRandomNumber().toString());
+            .randomNumber(unblindedVote.getRandomNumber());
 
         voteRepository.save(vote);
     }
@@ -197,7 +197,7 @@ public class VoteResource {
 
     private boolean checkIfNotExists(@RequestBody UnblindedVote unblindedVote) {
         boolean notExits = voteRepository
-            .findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber().toString()).isEmpty();
+            .findAllByAnswerIdAnAndVotingIdAndRandomNumber(unblindedVote.getVotingId(), unblindedVote.getRandomNumber()).isEmpty();
         if (!notExits) {
             log.error("This vote already exists and could not be added twice");
         }

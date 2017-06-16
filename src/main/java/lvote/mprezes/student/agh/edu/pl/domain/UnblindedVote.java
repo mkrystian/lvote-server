@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 
 /**
@@ -20,7 +19,7 @@ public class UnblindedVote implements Serializable {
 
     private Long votingId;
     private Long answerId;
-    private BigInteger randomNumber;
+    private String randomNumber;
     private RSAUnblindedSignature signature;
 
     public Long getVotingId() {
@@ -39,11 +38,11 @@ public class UnblindedVote implements Serializable {
         this.answerId = answerId;
     }
 
-    public BigInteger getRandomNumber() {
+    public String getRandomNumber() {
         return randomNumber;
     }
 
-    public void setRandomNumber(BigInteger randomNumber) {
+    public void setRandomNumber(String randomNumber) {
         this.randomNumber = randomNumber;
     }
 
