@@ -1,19 +1,20 @@
 package lvote.mprezes.student.agh.edu.pl.config;
 
-import io.github.jhipster.config.JHipsterConstants;
-import io.github.jhipster.config.JHipsterProperties;
-import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
-
+import io.github.jhipster.config.JHipsterConstants;
+import io.github.jhipster.config.JHipsterProperties;
+import io.github.jhipster.web.filter.CachingHttpHeadersFilter;
+import io.undertow.UndertowOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.*;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.MimeMappings;
+import org.springframework.boot.context.embedded.undertow.UndertowBuilderCustomizer;
 import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
-import io.undertow.UndertowOptions;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +23,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.*;
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
-import javax.servlet.*;
+import java.util.EnumSet;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -74,6 +75,11 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // When running in an IDE or with ./mvnw spring-boot:run, set location of the static web assets.
         setLocationForStaticAssets(container);
 
+        if (container instanceof UndertowEmbeddedServletContainerFactory) {
+            ((UndertowEmbeddedServletContainerFactory) container)
+                .addBuilderCustomizers((UndertowBuilderCustomizer) builder -> builder.addHttpListener(8081, "localhost"));
+        }
+
         /*
          * Enable HTTP/2 for Undertow - https://twitter.com/ankinson/status/829256167700492288
          * HTTP/2 requires HTTPS, so HTTP requests will fallback to HTTP/1.1.
@@ -83,9 +89,12 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         if (jHipsterProperties.getHttp().getVersion().equals(JHipsterProperties.Http.Version.V_2_0) &&
             container instanceof UndertowEmbeddedServletContainerFactory) {
 
+
             ((UndertowEmbeddedServletContainerFactory) container)
                 .addBuilderCustomizers(builder ->
                     builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
+
+
         }
     }
 
@@ -103,14 +112,14 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     }
 
     /**
-     *  Resolve path prefix to static resources.
+     * Resolve path prefix to static resources.
      */
     private String resolvePathPrefix() {
         String fullExecutablePath = this.getClass().getResource("").getPath();
         String rootPath = Paths.get(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
         int extractionEndIndex = extractedPath.indexOf("target/");
-        if(extractionEndIndex <= 0) {
+        if (extractionEndIndex <= 0) {
             return "";
         }
         return extractedPath.substring(0, extractionEndIndex);
