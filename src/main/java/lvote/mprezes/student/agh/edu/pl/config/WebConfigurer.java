@@ -77,7 +77,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
         if (container instanceof UndertowEmbeddedServletContainerFactory) {
             ((UndertowEmbeddedServletContainerFactory) container)
-                .addBuilderCustomizers((UndertowBuilderCustomizer) builder -> builder.addHttpListener(8081, "localhost"));
+                .addBuilderCustomizers((UndertowBuilderCustomizer) builder -> builder.addHttpListener(8081, "0.0.0.0"));
         }
 
         /*
