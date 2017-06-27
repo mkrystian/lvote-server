@@ -82,6 +82,7 @@ liquibase:
 #        keyAlias: lvote
 # ===================================================================
 server:
+    http.port: 80
     port: 443
     ssl:
         key-store: keystore.p12

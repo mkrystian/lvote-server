@@ -10,6 +10,7 @@ import io.undertow.UndertowOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
@@ -36,9 +37,13 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
-    private final Environment env;
+    private static final String HOST_ADDRESS = "0.0.0.0";
 
+    private final Environment env;
     private final JHipsterProperties jHipsterProperties;
+
+    @Value("${server.http.port}")
+    private int httpPort;
 
     private MetricRegistry metricRegistry;
 
@@ -77,7 +82,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
         if (container instanceof UndertowEmbeddedServletContainerFactory) {
             ((UndertowEmbeddedServletContainerFactory) container)
-                .addBuilderCustomizers((UndertowBuilderCustomizer) builder -> builder.addHttpListener(8081, "0.0.0.0"));
+                .addBuilderCustomizers((UndertowBuilderCustomizer) builder -> builder.addHttpListener(httpPort, HOST_ADDRESS));
         }
 
         /*
